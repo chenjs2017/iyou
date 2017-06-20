@@ -233,9 +233,10 @@ function pf_ajax_itemsystem(){
     /**
     *Start: New/Edit Item Form Request
     **/ 
-
+		
       if(isset($_POST) && $_POST!='' && count($_POST)>0){
 				if ($user_id==0) {
+						$is_anonymous = true;
 						$user_id=PFASSIssetControl('as_anonymous_id','',1);;
   						$vars['item_desc'] = '来自：' . $vars['item_url'] . '<br/>
 								联系电话：'. $vars['item_phone'] .'<br/>
@@ -326,6 +327,9 @@ function pf_ajax_itemsystem(){
 
   $pfreturn_url = $setup4_membersettings_dashboard_link.$pfmenu_perout.'ua=myitems';
 
+  if ($is_anonymous) {
+    $pfreturn_url = '/';
+  }
   $output_html = '';
   $output_html .= '<div class="golden-forms wrapper mini" style="height:200px">';
   $output_html .= '<div id="pfmdcontainer-overlay" class="pftrwcontainer-overlay">';
