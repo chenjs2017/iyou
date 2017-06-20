@@ -235,6 +235,14 @@ function pf_ajax_itemsystem(){
     **/ 
 
       if(isset($_POST) && $_POST!='' && count($_POST)>0){
+				if ($user_id==0) {
+						$user_id=PFASSIssetControl('as_anonymous_id','',1);;
+  						$vars['item_desc'] = '来自：' . $vars['item_url'] . '<br/>
+								联系电话：'. $vars['item_phone'] .'<br/>
+								电子邮件:'. $vars['item_email'] .'
+								<p>内容:</p>'. $vars['item_desc'];		  		  					
+					}
+					
           if($user_id != 0){
             if($vars['action'] == 'pfget_edititem'){
               
