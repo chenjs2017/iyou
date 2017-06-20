@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Documentation - Mapplic WordPress</title>
+	
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/github.highlight.css">
+</head>
+<body>
+	<div id="wrap">
+
+		<header id="header">
+			<div class="inner">
+				<h2 class="right">WordPress version</h2>
+				<a href="#changelog" class="version">v4.0.1</a>
+				<a id="logo" href="./"></a>
+			</div>
+		</header>
+
+		<section class="gray">
+			<div class="inner">
+				<h1>Documentation</h1>
+				<p>Thank you for purchasing <a href="http://www.mapplic.com" title="Mapplic">Mapplic WordPress</a>, the ultimate plugin for creating custom interactive maps using simple images (JPG, PNG) or vector graphics (SVG). Here you can find information about using and customizing the plugin. If you need anything that is beyond this documentation, feel free to get in touch through the <a href="http://codecanyon.net/user/sekler#contact">CodeCanyon profile page</a>.</p>
+			</div>
+		</section>
+
+		<div id="content" class="with-sidebar">
+			<div class="sidebar-holder">
+				<div id="sidebar">
+					<ul>
+						<li><a href="#files">Files</a></li>
+						<li>
+							<a href="#getting-started">Getting Started</a>
+							<ul>
+								<li><a href="#install">Install</a></li>
+								<li><a href="#first-map">First Map</a></li>
+								<li><a href="#interactive-elements">Interactive Elements</a></li>
+								<li><a href="#import-export">Import/Export</a></li>
+							</ul>
+						</li>
+						<li><a href="#options">Options</a></li>
+						<li>
+							<a href="#creating-map">Creating SVG Map</a>
+							<ul>
+								<li><a href="#creating">New document</a></li>
+								<li><a href="#drawing">Drawing map</a></li>
+								<li><a href="#saving">Saving map</a></li>
+							</ul>
+						</li>
+						<li><a href="#customization">Customization</a></li>
+						<li><a href="#api">API</a></li>
+						<li>
+							<a href="#others">Others</a>
+							<ul>
+								<li><a href="#changelog">Changelog</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<section id="files" class="section">
+				<div class="inner">
+					<h1>Files</h1>
+					<hr>
+					<p>After purchasing <strong>Mapplic - Custom Interactive Map WordPress Plugin</strong>, a ZIP file can be downloaded from CodeCanyon.  This compressed file contains two folders and a zip install file:</p>
+					<ul>
+						<li><p><strong>docs</strong> - documentation, a detailed user guide and an SVG map tutorial on creating Mapplic compatible maps</p></li>
+						<li><p><strong>mapplic</strong> - main plugin files with the required libraries, all the built-in and demo maps</p></li>
+						<li><p><strong>mapplic-install.zip</strong> - installable WordPress plugin</li>
+					</ul>
+					<h2>Update</h2>
+					<p>Mapplic comes with free, lifetime updates. Customers can always download the latest version from the <a href="http://codecanyon.net/downloads">CodeCanyon Downloads Page</a> (must be logged in). We will send out notifications on every major update.</p>
+				</div>
+			</section>
+
+			<section id="getting-started" class="section">
+				<div class="inner">
+					<h1>Getting Started</h1>
+					<hr>
+					<div id="install" class="section">
+						<h2>Install</h2>
+						<p>The easiest way to install Mapplic is through the WordPress dashboard.</p>
+						<ol>
+							<li><p>Log in to your WordPress dashboard and go to Plugins page</p></li>
+							<li><p>Click <strong>Add New</strong> then <strong>Upload Plugin</strong></p></li>
+							<li>
+								<p>Upload the installable <strong>mapplic-install.zip</strong> file obtained after unpacking the download package.</p>
+								<img class="centered" src="img/install.png">
+							</li>
+							<li><p>After the installation, activate the plugin and Mapplic will be ready to use.</p></li>
+						</ol>
+						<p>You can also install the plugin by uploading <strong>mapplic</strong> folder into your site's <i>wp-content/plugins</i> directory using FTP.</p>
+
+						<h3 id="updating-plugin">Updating the plugin</h3>
+						<p>Is there an update available? Follow these steps in order to have the latest version of Mapplic running on your WordPress site:</p>
+						<ol>
+							<li><p>Download the new version from your <a href="http://codecanyon.net/downloads">CodeCanyon Downloads Page</a> (must be logged in) and unpack it.</p></li>
+							<li><p>Log in to your WordPress dashboard and go to Plugins page.</p></li>
+							<li><p><strong>Deactivate</strong> the currently active Mapplic plugin and <strong>Delete</strong> it. Don't worry, your maps and settings won't be deleted, only the plugin files.</p></li>
+							<li><p>Install the new version exactly as <a href="#installing-plugin">installing</a> the plugin the first time. Your map database will remain untouched, however it's advised to create backup before updating.</p></li>
+						</ol>
+						<p class="note">Keep in mind that plugin core file modifications will be lost on update.</p>
+					</div>
+
+					<div id="first-map" class="section">
+						<h2>Creating your first map</h2>
+						<p>The plugin comes with three preconfigured example maps (<i>US States</i>, <i>Mall</i> and <i>Apartment</i>). If you are new to Mapplic, the easiest way to get started is by studying these examples and making simple changes to see how the plugin works.</p>
+						<p>At some point, you will have to create your own map, by click on <strong>Add New</strong> button (found on every <i>Custom Map</i> page, near the page title). You will be redirected to <i>Add New Custom Map</i> page, where you can give the map a title and choose map type. You have two options:</p>
+						<div id="built-in-map">
+							<h3>Built-in Map</h3>
+							<p>Use one of the built-in world/country maps by selecting one from the dropdown list. Currently available maps are:</p>
+							<ul>
+								<li>World</li>
+								<li>Continents</li>
+								<li>Europe</li>
+								<li>United States (USA)</li>
+								<li>Canada</li>
+								<li>Australia</li>
+								<li>France</li>
+								<li>Germany</li>
+								<li>United Kingdom (UK)</li>
+								<li>Italy</li>
+								<li>Netherlands</li>
+								<li>Switzerland</li>
+								<li>Russia</li>
+								<li>China</li>
+								<li>Brazil</li>
+							</ul>
+							<p>The new map will be ready to use after clicking on <strong>Create Map</strong> button, use the shortcode from <i>Custom Maps</i> page to embed a map into a page/post.</p>
+							<p>If the map you are looking for is not in the above list, you can look for it in our ever growing online map directory. If it's not available, you can create the map yourself. All you need to do is to download an <i>.svg</i> map of the country (Wikipedia is a good resource), make it <a href="#mapplic-compatible">Mapplic compatible</a> then add it as a Custom map described below.</p>
+						</div>
+						<div id="custom-map">
+							<h3>Custom Map</h3>
+							<p>In order to create a map using your own map images or vector graphics, choose <strong>Custom</strong> from the dropdown list. After clicking on <strong>Create Map</strong>, you have to complete the following steps for a working map:</p>
+							<ol>
+								<li><p>Create a new floor by clicking on <strong>New Floor</strong>.</p></li>
+								<li><p>Give your floor a <i>Name</i> and a unique, <a href="#valid-id">valid</a> <i>ID</i>.</p></li>
+								<li><p>Upload your map file (<i>.jpg</i>, <i>.png</i> and <i>.svg</i> supported) using the <strong>Add</strong> button.</p></li>
+								<li><p>Fill in the <strong>Map file dimensions (REQUIRED)</strong> fields with the width and height of your map file (uploaded in the previous step) in pixels.</p></li>
+								<li><p>Click <strong>Save</strong> and your map is ready be embedded into a page/post, using the shortcode obtained from the <i>Custom Maps</i> page.</p></li>
+							</ol>
+							<br>
+							<img class="centered" src="img/new-map.png">
+						</div>
+					</div>
+
+					<div id="interactive-elements" class="section">
+						<h2>Interactive Elements</h2>
+						<p>Also referred to as <strong>hoverable parts</strong>, <strong>active shapes</strong>, <strong>clickable elements</strong> (and many more), interactive element support is undoubtedly the most valuable and unique feature of Mapplic. It consists in making SVG elements clickable and hightlighted on mouse over, so it's only possible with <i>.svg</i> maps.</p>
+						<p>This simple yet valuable feature often generates confusion amongst users so we will try to solve it in this chapter. The golden rule is:</p>
+						<h4>Create link between shape and landmark through the ID field of the landmark!</h4>
+
+						<img class="centered" src="img/interactive-elements.png">
+						<p>Click on any shape on the backend map, and a string will appear on the top left corner inside a dark box. That is the text you have to use as your <strong>Landmark's ID</strong> in order to make a connection between the shape and landmark. It couldn't be easier!</p>
+						<p>In order to change the color of an interactive element, use the <strong>Fill</strong> attribute of the landmark (color picker right below the pin types).</p>
+						<p class="note">If nothing appears in the top left corner after clicking on a shape, your map is not ready yet, you have to <a href="#mapplic-compatible">make it Mapplic compatible</a> first.</p>
+					</div>
+
+					<div id="import-export" class="section">
+						<h2>Import/Export</h2>
+						<p>Now you can easily migrate your maps from one WordPress install to another using the Import/Export feature.</p>
+						<h3>Export</h3>
+						<p>In order to export a map, go to the <i>Custom Interactive Maps</i> list page, and click on the <strong>Export</strong> button right below the map title. You will be redirected to the <i>Export Map</i> page with the map data, the textarea's content is ready to be imported (see below).</p>
+
+						<h3>Import</h3>
+						<p>You can import map data on the <i>Add New Custom Map</i> page. Select <strong>Import</strong> from the dropdown menu and a large input textarea will appear. Paste your map data here and click <strong>Create Map</strong>.</p>
+						<p class="note">Map, minimap and other self-hosted image files must be migrated manually!</p>
+					</div>
+				</div>
+			</section>
+
+			<section id="options" class="section">
+				<div class="inner">
+					<h1>Options</h1>
+					<hr>
+					<p>Mapplic for WordPress allows map editing through its advanced backend interface. The following groups of options/attributes can be edited from the admin panel.</p>
+
+					<div id="floor-options">
+						<h2>Floors panel</h2>
+						<p>Each map can have unlimited number of floors but it must have at least one. Floors can be reordered by drag&amp;drop.</p>
+						<ul>
+							<li><p><strong>Name</strong> - name/title of the floor, displayed in the level switcher if there's more than one floor.</p></li>
+							<li><p><strong>ID (unique)</strong> - <a href="#valid-id">valid</a> floor ID that is required and cannot be changed later.</p></li>
+							<li><p><strong>Show by default</strong> - check it for the floor you want to be visible when the page loads, has meaning only if there's more than one floor.</p></li>
+							<li><p><strong>Map</strong> - path to map file. Files can be directly uploaded using the WordPress media uploader by clicking on <i>Add</i> button.</p></li>
+							<li><p><strong>Minimap</strong> - <i>(optional)</i> path to minimap file. Files can be directly uploaded using the WordPress media uploader by clicking on <i>Add</i> button.</p></li>
+						</ul>
+					</div>
+
+					<div id="category-options">
+						<h2>Categories panel</h2>
+						<p>Each map can have unlimited number of categories, however categories are optional. Categories can be reordered by drag&amp;drop.</p>
+						<ul>
+							<li><p><strong>Name</strong> - name/title of the category, displayed in the sidebar if enabled.</p></li>
+							<li><p><strong>ID (unique)</strong> - <a href="#valid-id">valid</a> category ID that is required and cannot be changed later.</p></li>
+							<li><p><strong>Expand by default</strong> - check this to have the category expanded by default, leave it unchecked to have it collapsed.</p></li>
+							<li><p><strong>Color</strong> - background color of the category in the sidebar.</p></li>
+					</div>
+
+					<div id="landmark-options">
+						<h2>Landmarks panel</h2>
+						<p>Each map can have unlimited number of landmarks. After clicking the <i>Add</i> button, the new landmark will be added to the center of the map and it can be drag &amp; dropped.</p>
+						<ul>
+							<li><p><strong>Title</strong> - title of the landmark, visible in the hover tooltip, popup and sidebar.</p></li>
+							<li><p><strong>ID (unique)</strong> - <a href="#valid-id">valid</a>, required landmark ID, used to <a href="#interactive-elements">link SVG shapes with landmarks</a>. It is also used by the deeplinking feature for the URLs.</p></li>
+							<li><p><strong>Description</strong> - HTML enabled description of the landmark, displayed in the popup. It can contain links, images, videos or any HTML content.</p></li>
+							<li><p><strong>Geolocation</strong> - only visible if the map is <a href="#geolocation-options">geolocation</a> compatible. You can set the <i>Latitude</i> and <i>Longitude</i>, further (drag&amp;drop) positioning is not required (and ignored).</p></li>
+							<li><p><strong>Color and Pin Type</strong> - type of the pin. The first in the list is the <i>hidden pin</i>, use it when the landmark is linked with an SVG shape. Use the color picker to color <a href="#interactive-elements">interactive elements</a>. Some of the pins (CSS pins) can also be colored using the color picker.</p>
+							<p>If the selected pin type supports labels, and additional <i>Label</i> field will appear.</p></li>
+							<li><p><strong>Link</strong> - URL associated with the landmark (start with http://). Popup's <i>More</i> button will link to this address, use the <strong>Action</strong> attribute to change the default behavior.</p></li>
+							<li><p><strong>Category</strong> - category of the landmark.</p></li>
+							<li><p><strong>Thumbnail</strong> - thumbnail image of the landmark, visible in the sidebar and tooltip.</p></li>
+							<li>
+								<p><strong>Action</strong> - action performed when a landmark is clicked</p>
+								<ul>
+									<li><p>Default - use the global default action defined on the <a href="#map-settings">Settings panel</a>.</p></li>
+									<li><p>Tooltip - open the tooltip with <i>More</i> button redirecting <strong>Link</strong>.</p></li>
+									<li><p>Open link - opening <strong>Link</strong> in the same tab.</p></li>
+									<li><p>Open link in new tab - opening <strong>Link</strong> in new tab.</p></li>
+									<li><p>Lightbox - use the lightbox as popup.</p></li>
+									<li><p>None - do nothing but zoom to the location.</p></li>
+								</ul>
+							</li>
+							<li><p><strong>About</strong> - short text displayed in the sidebar if enabled.</p></li>
+							<li><p><strong>Zoom Level</strong> - zoom level when the landmark is focused.</p></li>
+						</ul>
+					</div>
+
+					<div id="map-settings">
+						<h2>Settings panel</h2>
+						<p>List of possible map settings:</p>
+						<ul>
+							<li><p><strong>Map file Dimensions</strong> - width and height of your map file in pixels. This field is required!</p></li>
+							<li><p><strong>Minimap</strong> - enable/disable the minimap.</p></li>
+							<li><p><strong>Clear Button</strong> - enable/disable the clear button.</p></li>
+							<li><p><strong>Zoom Buttons</strong> - enable/disable zoom (+/-) buttons.</p></li>
+							<li><p><strong>Sidebar</strong> - enable/disable the sidebar.</p></li>
+							<li><p><strong>Search</strong> - enable/disable sidebar search (if sidebar is enabled).</p></li>
+							<li><p><strong>Hover Tooltip</strong> - enable/disable on hover tooltip, showing the title of locations.</p></li>
+							<li><p><strong>Mouse wheel</strong> - enable/disable mousewheel zoom support.</p></li>
+							<li><p><strong>Fullscreen</strong> - enable/disable HTML5 fullscreen feature.</p></li>
+							<li><p><strong>Deeplinking</strong> - enable/disable deeplinking feature (custom URL for each landmark).</p></li>
+							<li><p><strong>Enable zoom</strong> - enable zoom and pan feature.</p></li>
+							<li><p><strong>Map fills the container</strong> - map fills the container if checked, otherwise it fits in container.</p></li>
+							<li><p><strong>Alphabetically ordered</strong> - have the landmarks ordered alphabetically in sidebar (if sidebar is enabled).</p></li>
+							<li><p><strong>Zoom Limit</strong> - zoom-in limit of the map. 1 is the map's actual size. Use 2 for 2x zoom, 3 for 3x etc.</p></li>
+							<li><p><strong>Default Action</strong> - default action to perform when a location is focused. Landmarks' <i>Action</i> attribute can override this.</p></li>
+							<li><p><strong>Default Fill Color</strong> - default fill color of interactive elements and CSS pins. Landmarks' <i>Fill</i> attribute can override this. Use blank string ('') for no fill.</p></li>
+						</ul>
+					</div>
+
+					<div id="geolocation-options">
+						<h2>Geoposition panel</h2>
+						<p>New feature introduced in Mapplic version 4.0, allows using real latitude and longitude coordinates for positioning landmarks. It only works with maps specially created to support this feature (for example Netherlands built-in map). We are constantly adding new maps with geolocation support to our map base.</p>
+						<h4>A map is geolocation compatible if:</h4>
+						<ul>
+							<li><p>Borders of the map file (bottom latitude, left longitude, top latitude and right longitude) are defined here.</p></li>
+							<li><p>The projection of the map is <strong>Web Mercator (EPSG:3857)</strong>, also called Google Web Mercator or WGS 84/Pseudo-Mercator, which is the standard projection for maps on the web.</p></li>
+						</ul>
+						<p>If the above requirements are met, you can use the <i>Geolocation</i> landmark attributes for positioning. You can easily get the lat/lng coordinates of a place using right-click, "What's here" on Google Maps.</p>
+					</div>
+
+					<div id="valid-id">
+						<h2>Valid IDs</h2>
+						<p>An <strong>ID</strong> of floor, category or landmark is valid if:</p>
+						<ul>
+							<li><p>unique, no duplicates please,</p></li>
+							<li><p>starts with a letter (<i>a-z</i>),</p></li>
+							<li><p>contains only letters (a-z), numbers (0-9), underscore (_) or hyphen (-).</p></li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section id="creating-map" class="section">
+				<div class="inner">
+					<h1>Creating SVG Map</h1>
+					<hr>
+					<p>Creating a new map or making an existing one compatible with Mapplic requires a few simple steps. It's nothing more than simple naming and grouping convetions.</p>
+					<p>We are using Adobe Illustrator CC in this tutorial, however older versions of Illustrator can also be used. <a href="https://inkscape.org/" target="_blank" title="Inkscape">Inkscape</a> is a free alternative for creating vector graphics, but due to its popularity, the steps are presented in Adobe Illustrator.</p>
+					<h3>Walkthrough</h3>
+					<iframe src="https://www.screenr.com/embed/ZstN" width="650" height="396" frameborder="0"></iframe>
+					<p>The above video is a walkthrough of creating a simple SVG maps with interactive elements. In the next section each step is explained in detail.</p>
+					<div id="creating" class="section">
+						<h2><span>1</span> Creating New Document</h2>
+						<p>Open Illustrator and create a <strong>New Document</strong>. Give your document a name, make sure the Units are set to <strong>Pixels</strong> and choose the desired dimensions (width and height).</p>
+						<img class="centered" src="img/new-document.png" alt="New Document">
+						<p>Press OK, and an empty, white canvas will appear.</p>
+					</div>
+					<div id="drawing" class="section">
+						<h2><span>2</span> Drawing the map</h2>
+						<p>The next step would be the actual drawing of the map. You can always add or edit content, so if it's your first time creating a map, experiment with a few simple shapes, you can add complex drawings later.</p>
+
+						<img class="centered" src="img/svg-grouping.png" alt="SVG Grouping">
+
+						<h4 id="mapplic-compatible">Either you've drawn a new map or trying to make an existing one Mapplic compatible, continue from here.</h4>
+
+						<p>The correct <strong>grouping and naming</strong> of the SVG elements is <strong>very important</strong>, it is used by the plugin to identify elements with different behavior (for example the interactive elements of the map). For creating groups and naming elements use the <i>Layers tool (F7)</i>. There are three types of elements:</p>
+
+						<h3>Common elements (environment)</h3>
+						<p>The first type is the common elements. These will be the elements on the map without interactivity. You are free to draw all kinds of shapes or add images without any naming or grouping conventions. In general the environment is non interactive so we're using common elements. On the walkthrough video this would be the <i>base</i>.</p>
+
+						<h3>Interactive elements (landmarks)</h3>
+						<p>We will refer to the interactive elements of the map as "landmarks". Every named, direct child of a group having a name starting with <strong>landmarks</strong> is considered a landmark. So create interactive elements as follows.</p>
+						<ol>
+							<li>
+								<p>Create a new group. The name of the group MUST start with "landmarks" and cannot contain spaces.</p>
+								<p>Correct: <i>landmarks-test</i>, <i>landmarks-deparment-shops</i>, <i>landmarks-lots</i></p>
+								<p>Incorrect: <i class="stirke">landmark</i>, <i class="stirke">test_landmarks</i>, <i class="stirke">lndmarklots</i></p>
+							</li>
+							<li>
+								<p>Select the shapes you want to make interactive and move them to the first level of the newly created group, make sure there are no nested groups.</p>
+							</li>
+							<li>
+								<p>Name each landmark with a unique identifier. The names cannot contain spaces! When you will be creating landmarks on WordPress backend, you will have to use the same ID for the landmark. The <a href="#interactive-elements"><strong>landmark and the SVG shape are connected through this ID</strong></a> so make sure it's UNIQUE!</p>
+							</li>
+						</ol>
+
+						<h3>Nopointer elements (logos/captions)</h3>
+						<p>Sometimes an overlaying element might block the interactivity, for example logos or captions over a landmark. This is where nopointer elements come handy. If an element's or its parent's (direct or indirect) name starts with <strong>nopointer</strong>, it will be ignored by the mouse pointer.</p>
+					</div>
+					<div id="saving" class="section">
+						<h2><span>3</span> Saving the Map</h2>
+						<p>To save your map as .svg, use the <i>File > Save As</i> option, select the type <strong>SVG (*.SVG)</strong>.</p>
+						<img class="centered" src="img/save-document.png" alt="Save Document">
+						<p class="nomargin">It is advised to:</p>
+						<ul>
+							<li><p>set at least 2 for the decimal places.</p></li>
+							<li><p>link images (if there is any) instad of embedding.</p></li>
+							<li><p>use <i>Presentation Attributes</i> for CSS Properties if the map has more floors.</p></li>
+						</ul>
+						<p>With some basic Illustrator skills, anyone can create a Mapplic compatible interactive vector map within minutes. If you have any further questions please get in touch using this <a href="http://codecanyon.net/user/sekler?ref=sekler#contact">contact form</a>.</p>
+					</div>
+				</div>
+			</section>
+
+			<section id="customization" class="section">
+				<div class="inner">
+					<h1>Customization</h1>
+					<hr>
+					<p>In some cases your project might require changes not possible through simple <a href="#options">options</a>. In the following, we will go through a few commonly requested modifications. If you need further customization, feel free to get in touch, we are available for custom work.</p>
+					<p>There are three files you might need to edit: <i>js/mapplic.js</i>, <i>css/mapplic.css</i> and <i>css/map.css</i>. To make your CSS changes future proof, it's strongly advised to write the changes in <i>css/map.css</i>, even if the selector already exists.</p>
+					<div id="custom-pin">
+						<h2>Custom pins</h2>
+						<p>Mapplic comes with a few built-in pins, however you can easily add your own pin types, as much as you want.</p>
+
+						<ol>
+							<li>
+								<p> Open <i>wp-content/plugins/mapplic/css/map.css</i> file and find the selector <strong>.mapplic-pin.my-new-pin</strong>. Duplicate it and replace 'my-new-pin' with the name of your pin, customize the attributes (background-image, width, height, margin-top, margin-left).</p>
+								<pre><code>/* CUSTOM PINS */
+.mapplic-pin.my-new-pin {
+	background-image: url(../images/my-new-pin.png);
+	width: 20px;
+	height: 30px;
+	margin-top: -15px;
+	margin-left: -10px;
+}</code></pre>
+								<p class="note">Negative margins are used for defining the pin's origin point.</p>
+								<br>
+							</li>
+							<li>
+								<p>Now you have to register the new custom pin types to appear on Mapplic backend. The following code has to be called somewhere in the project, preferably in your theme's <i>functions.php</i> to make the changes future proof.</p>
+								<pre><code>/* Mapplic Custom Pins */
+function mapplic_extend_pins($pins) {
+	// New pin types
+	$custom = array('my-new-pin', 'my-new-pin2');
+	
+	// Merging arrays
+	$pins = array_merge($pins, $custom);
+
+	return $pins;
+}
+add_filter('mapplic_pins', 'mapplic_extend_pins');
+</code></pre>
+							</li>
+						</ol>
+
+					</div>
+
+					<div id="right-sidebar">
+						<h2>Right sidebar</h2>
+						<p>The <strong>.mapplic-sidebar</strong> is floated to left by default. Moving the sidebar to right couldn't be easier, just float it to right.</p>
+						<pre><code>.mapplic-sidebar {
+	float: right;
+}</code></pre>
+					</div>
+					<div id="resizing-sidebar">
+						<h2>Resizing the Sidebar</h2>
+						<p>By default, the sidebar takes up 30% of the available width. Make sure the sum of container and sidebar width is equal to 100%!</p>
+					<pre><code>/* a narrower sidebar */
+.mapplic-sidebar {
+	width: 25%;
+}
+
+.mapplic-container {
+	width: 75%;	
+}
+</code></pre>
+					</div>
+					<div id="resizing-minimap">
+						<h2>Resizing the Minimap</h2>
+						<p>By default, the minimap has a width of 140 pixels. To resize it, we have to alter the width, the height will be adjusted automatically maintaining the aspect ratio. It can be resized using the following style:</p>
+					<pre><code>.mapplic-minimap {
+	width: 200px;	
+}
+</code></pre>
+					</div>
+					<div id="relocating-components">
+						<h2>Relocating Components</h2>
+						<p>You might want to relocate the UI elements over the map (minimap, level switcher, clear button, fullscreen button, zoom buttons). Use the top/right/bottom/left attributes to move them. For example, if we wanted to move the level switcher to the top-left corner:</p>
+					<pre><code>.mapplic-levels {
+	top: 0;
+	left: 0;	
+}
+</code></pre>
+					</div>
+					<div id="link-new-tab">
+						<h2>Making the link open in a new Tab/Window</h2>
+						<p>Use text editor's search feature to find the first line, and replace it with the second:</p>
+						<pre><code>// find this:
+this.link = $('&lt;a&gt;' + mapplic_localization.more_button + '&lt;/a&gt;').addClass('mapplic-tooltip-link').attr('href', '#').hide().appendTo(this.el);
+
+// replace with this:
+this.link = $('&lt;a&gt;' + mapplic_localization.more_button + '&lt;/a&gt;').addClass('mapplic-tooltip-link').attr('href', '#').attr('target', '_blank').hide().appendTo(this.el);
+</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="api" class="section">
+				<div class="inner">
+					<h1>API</h1>
+					<hr>
+					<p>Since version 4.0 Mapplic comes with a list of public methods and events to provide even more flexibility. Using the API is highly advised for future-proof plugin modifications, you can avoid losing changes when updating to a new version.</p>
+					<div id="events">
+						<h2>Events</h2>
+						<p>Events can be bound to initialized Mapplic instances. List of public events currently available:</p>
+						<ul>
+							<li><p><strong>mapready</strong> - the maps is fully loaded</p></li>
+							<li><p><strong>locationopened</strong> - a location is focused</p></li>
+							<li><p><strong>locationclosed</strong> - a location is closed</p></li>
+							<li><p><strong>levelswitched</strong> - the active level is switched</p></li>
+							<li><p><strong>positionchanged</strong> - map movement performed (zoom or pan)</p></li>
+						</ul>
+						<pre><code>$(document).ready(function() {
+	// #mapplic1 selector saved in map variable,
+	// always the first Mapplic instance on the page
+	var map = $('#mapplic1');
+
+	// EXAMPLES
+	// Map ready
+	map.on('mapready', function(e, self) {
+		console.log('Map is ready!')
+		// self grants direct access to the map object,
+		// be focused on the washing machine by default
+		self.moveTo(0.67, 0.62, 3, 0);
+	});
+
+	// Location opened
+	map.on('locationopened', function(e, location) {
+		// location grants full access to the location
+		console.log(location.title + ' opened.');
+	});
+
+	// Location closed
+	map.on('locationclosed', function(e) {
+		console.log('Location closed.');
+	});
+
+	// Level switched
+	map.on('levelswitched', function(e, level) {
+		console.log('Switched to ' + level + ' level.');
+	});
+
+	// Position changed
+	map.on('positionchanged', function(e, self) {
+		// self grants direct access to the map object
+		console.log('Pan/zoom, current scale: ' + self.scale);
+	});
+});</code></pre>				
+					</div>
+					<div id="methods">
+						<h2>Methods</h2>
+						<p>Metods are public function performing basic tasks. You can call them using the map object which can be accessed by calling .data('mapplic') on the selector. The map object also grants access to components and other variables. Currently supported public methods are:</p>
+						<ul>
+							<li><p><strong>switchLevel(target)</strong> - switch to level with ID <i>target</i></p></li>
+							<li><p><strong>moveTo(x, y, s, d)</strong> - move to position <i>x</i>, <i>y</i> on scale <i>s</i> in <i>d</i> milliseconds</p></li>
+							<li><p><strong>getLocationData(id)</strong> - get the data object of location</p></li>
+							<li><p><strong>showLocation(id, d)</strong> - focus to location in <i>d</i> milliseconds</p></li>
+							<li><p><strong>hideLocation()</strong> - close currently active location</p></li>
+							<li><p><strong>updateLocation(id)</strong> - update location on the map</p></li>
+						</ul>
+						<pre><code>$(document).ready(function() {
+	// #mapplic1 selector saved in map variable,
+	// always the first Mapplic instance on the page
+	var map = $('#mapplic1');
+
+	// Access to map object from selector
+	var self = map.data('mapplic');
+
+	// EXAMPLE 1
+	// Showing visitor's geolocation
+	map.on('mapready', function(e, self) {
+		// Update location with geoposition
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(pos) {
+				var location = self.getLocationData('pos');
+				location.lat = pos.coords.latitude;
+				location.lng = pos.coords.longitude;
+				self.updateLocation('pos');
+			});
+		}
+		else console.log('Geolocation not enabled.');
+	});
+
+	// EXAMPLE 2
+	// Switch level from external button
+	$(document).on('click', '#goto-level1-button', function(e) {
+		e.preventDefault();
+		self.switchLevel('level1');
+	});
+});</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="others" class="section">
+				<div class="inner">
+					<h1>Others</h1>
+					<hr>
+					<p>Thank you for reading the docs carefully. In case you found anything wrong or incomplete please let us know.  We are working hard to provide an affordable, premium quality custom map solution.</p>
+					<img src="img/stars.png">
+					<p>If you like the plugin please consider rating it with <strong>5 stars</strong> on <a href="http://codecanyon.net/downloads#item-6800158" target="_blank">CodeCanyon</a>.</p>
+					<div id="credits">
+						<h2>Credits</h2>
+						<ul>
+							<li><p><strong>jQuery Library</strong></p></li>
+							<li><p><strong>jQuery Mouse Wheel Plugin</strong> - mousewheel</p></li>
+							<li><p><strong>Hammer.js</strong> - pinch zoom</p></li>
+							<li><p><strong>Magnific Popup</strong> - lightbox</p></li>
+						</ul>
+					</div>
+
+					<div id="changelog" class="section">
+						<h2>Changelog</h2>
+						<h3>Version 4.0.1 - July 5th, 2016</h3>
+						<pre>
+- IE9 bug fix
+- empty desc bug fix</pre>
+
+						<h3>Version 4.0 - June 10th, 2016</h3>
+						<pre>
+- IMPORT/EXPORT tool
+- GEOLOCATION feature
+- LIGHTBOX support
+- API with basic methods and events
+- new built in map: The Netherlands
+- Future proof custom pins
+- backend UI optimization
+- maps per page increased
+- improved responsive behavior
+- pin label support
+- new pin types
+- landmark About attribute
+- tooltip with thumnail
+- default fill color and default action
+- mousewheel setting
+- css and javascript optimizations
+- hammer.js updated to version 2.0.6</pre>
+
+						<h3>Version 3.1 - July 7th, 2015</h3>
+						<pre>
+- SMART TOOLTIP - tooltip now repositions itself and it's always visible
+- 7 new built in maps: Continents, Australia, Italy, Switzerland, Russia, China, Brazil
+- thumbnail support
+- docs rewritten from scratch
+- edit map button
+- fixed container width removed 
+- duplicate feature
+- possibility to link floors
+- tooltip scroll bug fixed
+- small CSS fixes</pre>
+
+						<h3>Version 3.0 - February 20th, 2015</h3>
+						<pre>
+- 7 built in maps: World, Europe, USA, Canada, France, Germany, England
+- new generation of interactive SVG maps (old method still supported)
+- deeplinking engine rewritten (hash > query parameter)
+- zoom buttons (+/-) added
+- map in container: fit or fill
+- mobile optimiztaion
+- retina support
+- hammer.js updated to version 2.0.4
+- new pin types added
+- drag&amp;drop fix: now clickable areas can be dragged as well without activating them
+- small design changes
+- landmark list alphabetic order
+- colorable landmarks (svg)
+- landmark actions (tooltip/redirect)
+- zooming can be disabled
+- small bug fixes</pre>
+
+						<h3>Version 2.0.1 - August 2nd, 2014</h3>
+						<pre>
+- text tab added to description editor
+- fullscreen bug fixed
+- IE9 tooltip close/clear button bug fixed
+- pin animation setting added
+- input focusing issues in Mozilla fixed</pre>
+
+						<h3>Version 2.0 - July 17th, 2014</h3>
+						<pre>
+- PINCH ZOOM added for touch devices
+- hybrid mode added (now you can have clickable shapes and pins on the same map)
+- developer mode added (easy to find x/y coordinates)
+- tooltip rewritten to support any data (ex. youtube videos) 
+- tooltip dynamic width
+- tooltip dynamic height (with scrollbar if needed)
+- smart tooltip positioning
+- fullscreen button added
+- search feature improved
+- SVG tutorial included
+- hover tooltip added
+- pin animations added
+- ajax preloader added
+- new flat design
+- source code improved and greatly optimized
+- description field rich editor added
+- comes with three example maps
+- multisite bug fixed
+- field validations improved
+- landmark list visible on backed</pre>
+
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<footer id="footer">
+			<div class="inner">
+				<p>Copyright &copy; 2016 <a href="http://codecanyon.net/user/sekler?ref=sekler" target="_blank"><b>sekler</b></a>. All rights reserved.</p>
+			</div>
+		</footer>
+	</div>
+
+	<!-- Scripts -->
+	<script type="text/javascript" src="js/smoothscroll.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/highlight.pack.js"></script>
+	<script type="text/javascript">
+		$(window).scroll(function() {
+			// Sticky sidebar
+			if ($(window).scrollTop() > $('.sidebar-holder').offset().top-1) {
+				$('#sidebar').addClass('fixed');
+
+			} else {
+				$('#sidebar').removeClass('fixed');
+			}
+
+			// Highlight menu
+			$('#content .section').each(function() {
+				if ($(window).scrollTop() > $(this).offset().top - 20) {
+					var id = $(this).attr('id');
+					$('#sidebar a').removeClass('active');
+					$('#sidebar a[href=#'+ id +']').addClass('active');
+				}
+			});
+
+			// Highlightjs
+			hljs.initHighlightingOnLoad();
+		});
+
+		$(window).scroll();
+	</script>
+</body>
+</html>

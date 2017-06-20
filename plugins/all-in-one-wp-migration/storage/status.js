@@ -1,0 +1,1 @@
+{"type":"download","message":"<a href=\"http:\/\/www.test.uschineselife.com\/wp-content\/ai1wm-backups\/www.test.uschineselife.com-20160803-204423-242.wpress\" class=\"ai1wm-button-green ai1wm-emphasize\"><span>Download www.test.uschineselife.com<\/span><em>Size: 4 GB<\/em><\/a>","title":null}

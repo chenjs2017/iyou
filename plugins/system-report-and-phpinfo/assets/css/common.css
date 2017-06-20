@@ -1,0 +1,24 @@
+.mdt-wrap pre {
+    color: #111111;
+
+    width: 1500px;
+    max-width: 95%;
+
+    background: #cacaca;
+    padding: 15px;
+    border: solid 1px #bababa;
+}
+
+.mdt-action-buttons {
+    width:100%;
+    height:50px;
+    clear:both;
+}
+
+.mdt-action-buttons form {
+    display: inline-block;
+    margin: 10px 10px 20px 0px;
+    float:left;
+}
+
+
