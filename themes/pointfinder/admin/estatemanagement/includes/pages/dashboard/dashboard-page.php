@@ -17,7 +17,7 @@ if(isset($ua_action)){
 	$setup4_membersettings_dashboard_link = get_permalink($setup4_membersettings_dashboard);
 	$pfmenu_perout = PFPermalinkCheck();
 
-	if(is_user_logged_in()){
+	if(is_user_logged_in()||$ua_action=='newitem'){
 
 		if($setup4_membersettings_dashboard != 0){
 

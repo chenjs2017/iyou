@@ -56,12 +56,7 @@ if (!String.prototype.format) {
 	}
 
 	$('#pfpostitemlink a').on('click', function(event) {
-		if (theme_scriptspf.userlog == 1) {
 			window.location = theme_scriptspf.dashurl;
-		}else{
-			$.pfOpenLogin('open','login','','',2);
-		};
-
 	});
 
 
