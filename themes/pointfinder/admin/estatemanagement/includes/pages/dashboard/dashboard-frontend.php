@@ -79,7 +79,6 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 				$main_package_expire_problem = false;
 
 				$hide_button = false;
-
 				switch ($params['formtype']) {
 					case 'purchaseplan':
 					case 'renewplan':
@@ -517,6 +516,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 
 							$noncefield = wp_create_nonce($formaction);
 
+
 							if ($params['dontshowpage'] != 1) {
 							
 							wp_enqueue_script('theme-dropzone');
@@ -528,6 +528,14 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 							wp_enqueue_style('jquery-ui-smoothnesspf2', get_template_directory_uri() . "/css/jquery-ui.structure.min.css", false, null);
 							wp_enqueue_style('jquery-ui-smoothnesspf', get_template_directory_uri() . "/css/jquery-ui.theme.min.css", false, null);
 
+							wp_enqueue_script('jquery-ui-core');
+							wp_enqueue_script('jquery-ui-datepicker');
+							wp_enqueue_script('jquery-ui-slider');
+							wp_register_script('theme-timepicker', get_template_directory_uri() . '/js/jquery-ui-timepicker-addon.js', array('jquery','jquery-ui-datepicker'), '4.0',true); 
+							wp_enqueue_script('theme-timepicker');
+
+
+							
 
 							/* Get Admin Settings for Default Fields */
 							$setup4_submitpage_titletip = PFSAIssetControl('setup4_submitpage_titletip','','');
@@ -725,10 +733,13 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 								/** 
 								*Start : First Column (Custom Fields)
 								**/
+							            $is_editor=current_user_can( 'edit_others_posts' );
+							            
 										if ($this->itemrecurringstatus == 1) {
 											$this->FieldOutput .= '<div class="notification warning" style="border:1px solid rgba(255, 206, 94, 0.99)!important" id="pfuaprofileform-notify"><div class="row"><p><i class="pfadmicon-glyph-731"></i> '.esc_html__("You can not change Listing Type, Featured Option and Listing Plan while this item using recurring payment. Please cancel recurring payment option for change these values.",'pointfindert2d').'<br></p></div></div>';
 										}
-
+										if ($is_editor )
+										{
 										/**
 										*Listing Types
 										**/
@@ -1146,7 +1157,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 													}
 												";
 											/* End: Function for sub sub listing types */
-
+										
 
 											/* Start: Create Limit Array */
 
@@ -1311,7 +1322,15 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 
 														$.pf_get_sublistingtypes($('#pfupload_listingtypes').val(),'".$sub_level."');
 														
+
+														if (($.inArray(parseInt($('input.pflistingtypeselector:checked').val()),pfsubcatselect) != -1)) {
+															
+															$.pf_get_modules_now(".$item_defaultvalue_output.");
+															
+														}
+
 														if (($.inArray(parseInt($('input.pflistingtypeselector:checked').val()),pfmultipleselect) != -1)) {
+
 															$.pf_get_modules_now(".$item_defaultvalue_output.");
 															
 														}else{
@@ -1365,24 +1384,29 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										/**
 										*Listing Types
 										**/
-
-
+										} //end of is_editor
+										$user_id = get_current_user_id();
+										$msg = '为了保证发布信息的质量，所有信息需要经过审核后才能发布。如果您是<a href="/wp-login.php?action=register" style="color:blue">注册</a>用户，您可以在‘信息列表’中查看自己已经发布的信息。如果您是匿名用户，我们的编辑人员会在通过信息审核后，把信息的链接通过邮件发送给您';
+										if ($user_id>0) {
+												global $current_user;
+												$msg= '欢迎您归来' . $current_user->nickname ;	
+										}
 										/**
 										* Title & Description Area
 										**/
 											$this->FieldOutput .= '<div class="pf-excludecategory-container">';
-
-											$this->FieldOutput .= '<div class="pfsubmit-title">'.esc_html__("INFORMATION",'pointfindert2d').'</div>';
+											
+											$this->FieldOutput .= '<div class="pfsubmit-title">'. $msg .'</div>';
 											$this->FieldOutput .= '<section class="pfsubmit-inner">';
 
-												/**
+											/**
 												*Title
 												**/
 													$setup4_submitpage_titleverror = PFSAIssetControl('setup4_submitpage_titleverror','','Please type a title.');
 													$item_title = ($params['post_id'] != '') ? get_the_title($params['post_id']) : '' ;
 													$this->FieldOutput .= '
 													<section class="pfsubmit-inner-sub">
-								                        <label for="item_title" class="lbl-text">'.esc_html__('Title','pointfindert2d').':</label>
+								                        <label for="item_title" class="lbl-text">'.esc_html__('景点名称','pointfindert2d').':</label>
 								                        <label class="lbl-ui">
 								                        	<input type="text" name="item_title" id="item_title" class="input" value="'.$item_title.'"/>';
 													if ($setup4_submitpage_titletip!='') {
@@ -1395,25 +1419,51 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 												/**
 												*Title
 												**/
+													//jschen added telephoe
+												if ($user_id == 0)
+												{
+														
+													$this->PFValidationCheckWrite(1,'请输入电话','item_phone');
+													$this->FieldOutput .= '
+													<section class="pfsubmit-inner-sub">
+								                        <label for="item_phone" class="lbl-text">'.esc_html__('联系电话','pointfindert2d').':</label>
+								                        <label class="lbl-ui">
+								                        	<input type="text" name="item_phone" id="item_phone" class="input" value=""/>';
+												          $this->FieldOutput .= '</label> </section>';
 
+													$this->PFValidationCheckWrite(1,'请输入电子邮件','item_email');
+													$this->FieldOutput .= '
+													<section class="pfsubmit-inner-sub">
+								                        <label for="item_email" class="lbl-text">'.esc_html__('电子邮件','pointfindert2d').':</label>
+								                        <label class="lbl-ui">
+								                        	<input type="text" name="item_email" id="item_email" class="input" value=""/>';
+												          $this->FieldOutput .= '</label> </section>';
+
+													}
+													$this->FieldOutput .= '<input type="hidden" name="item_url" id="item_url" value="'.html_entity_decode( urldecode($_GET['url'])) . '"/>';
+												
 
 												/**
 												*Desc
 												**/
-													$setup4_submitpage_descriptionvcheck = PFSAIssetControl('setup4_submitpage_descriptionvcheck','','0');
-													$setup4_submitpage_description_verror = PFSAIssetControl('setup4_submitpage_description_verror','','Please write a description');
-													$item_desc = ($params['post_id'] != '') ? get_post_field('post_content',$params['post_id']) : '' ;
+													
+													$setup4_sbp_dh = PFSAIssetControl('setup4_sbp_dh','','1');
+													if ($setup4_sbp_dh == 1) {
+														$setup4_submitpage_descriptionvcheck = PFSAIssetControl('setup4_submitpage_descriptionvcheck','','0');
+														$setup4_submitpage_description_verror = PFSAIssetControl('setup4_submitpage_description_verror','','Please write a description');
+														$item_desc = ($params['post_id'] != '') ? get_post_field('post_content',$params['post_id']) : '' ;
 
-													$this->FieldOutput .= '
-													<section class="pfsubmit-inner-sub">
-								                        <label for="item_desc" class="lbl-text">'.esc_html__('Description','pointfindert2d').':</label>
-								                        <label class="lbl-ui">';
+														$this->FieldOutput .= '
+														<section class="pfsubmit-inner-sub">
+									                        <label for="item_desc" class="lbl-text">'.esc_html__('请输入商家描述，打折优惠信息，联系电话','pointfindert2d').':</label>
+									                        <label class="lbl-ui">';
 
-								                        $this->FieldOutput .= do_action( 'pf_desc_editor_hook',$item_desc);
-								                        $this->FieldOutput .= '<textarea id="item_desc" name="item_desc" class="textarea mini">'.$item_desc.'</textarea>';
+									                        $this->FieldOutput .= do_action( 'pf_desc_editor_hook',$item_desc);
+									                        $this->FieldOutput .= '<textarea id="item_desc" name="item_desc" class="textarea mini">'.$item_desc.'</textarea>';
 
-								                    $this->FieldOutput .= '</label></section>';
-													$this->PFValidationCheckWrite($setup4_submitpage_descriptionvcheck,$setup4_submitpage_description_verror,'item_desc');
+									                    $this->FieldOutput .= '</label></section>';
+														$this->PFValidationCheckWrite($setup4_submitpage_descriptionvcheck,$setup4_submitpage_description_verror,'item_desc');
+													}
 												/**
 												*Desc
 												**/
@@ -1427,7 +1477,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										/**
 										*Item Types
 										**/
-											if($setup3_pointposttype_pt4_check == 1 && $setup4_submitpage_itemtypes_check == 1){
+											if($is_editor && $setup3_pointposttype_pt4_check == 1 && $setup4_submitpage_itemtypes_check == 1){
 												$setup4_submitpage_itemtypes_title = PFSAIssetControl('setup4_submitpage_itemtypes_title','','Item Type');
 
 												$this->FieldOutput .= '<div class="pfsubmit-title pfsubmit-inner-sub-itype">'.$setup4_submitpage_itemtypes_title.'</div>';
@@ -1442,7 +1492,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										/**
 										*Conditions
 										**/	
-											if($setup3_pt14_check == 1 && $setup4_submitpage_conditions_check == 1){
+											if($is_editor && $setup3_pt14_check == 1 && $setup4_submitpage_conditions_check == 1){
 												
 												$setup4_submitpage_conditions_title = PFSAIssetControl('setup4_submitpage_conditions_title','','Conditions');												
 
@@ -1454,20 +1504,17 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										**/
 
 
+                                        if($is_editor) {
 
-
-										/**
-										*Features
+										/** 
+										*Start : Event Details
 										**/
-											if($setup3_pointposttype_pt6_check == 1 && $setup4_submitpage_featurestypes_check == 1){
-												$setup4_submitpage_featurestypes_title = PFSAIssetControl('setup4_submitpage_featurestypes_title','','Features');
-
-												$this->FieldOutput .= '<div class="pfsubmit-title pfsubmit-inner-features-title">'.$setup4_submitpage_featurestypes_title.'</div>';
-												$this->FieldOutput .= '<section class="pfsubmit-inner pfsubmit-inner-features"></section>';
-											}
-										/**
-										*Features
+											$this->FieldOutput .= '<div class="eventdetails-output-container"></div>';
+										/** 
+										*End : Event Details
 										**/
+
+
 
 
 										/** 
@@ -1478,12 +1525,27 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										/** 
 										*End : Custom Fields
 										**/
+                                        }
+
+
+
+										/**
+										*Features
+										**/
+											if($is_editor && $setup3_pointposttype_pt6_check == 1 && $setup4_submitpage_featurestypes_check == 1){
+												$setup4_submitpage_featurestypes_title = PFSAIssetControl('setup4_submitpage_featurestypes_title','','Features');
+
+												$this->FieldOutput .= '<div class="pfsubmit-title pfsubmit-inner-features-title">'.$setup4_submitpage_featurestypes_title.'</div>';
+												$this->FieldOutput .= '<section class="pfsubmit-inner pfsubmit-inner-features"></section>';
+											}
+										/**
+										*Features
+										**/
 
 
 										/**
 										*Custom Tabs
 										**/	
-
 											$this->FieldOutput .= '<div class="customtab-output-container"></div>';
 											
 										/**
@@ -1495,7 +1557,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										*Post Tags
 										**/
 											$stp4_psttags = PFSAIssetControl('stp4_psttags','','1');
-											if ($stp4_psttags == 1) {
+											if ($is_editor && $stp4_psttags == 1) {
 												$this->FieldOutput .= '<div class="pfsubmit-title">'.esc_html__('Tags','pointfindert2d').'</div>';
 												$this->FieldOutput .= '<section class="pfsubmit-inner">';
 												$this->FieldOutput .= '
@@ -1543,18 +1605,6 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 
 											$setup3_modulessetup_openinghours = PFSAIssetControl('setup3_modulessetup_openinghours','','0');
 											$setup3_modulessetup_openinghours_ex = PFSAIssetControl('setup3_modulessetup_openinghours_ex','','1');
-
-											
-											if($setup3_modulessetup_openinghours == 1 && $setup3_modulessetup_openinghours_ex == 2){
-												
-												wp_enqueue_script('jquery-ui-core');
-												wp_enqueue_script('jquery-ui-datepicker');
-												wp_enqueue_script('jquery-ui-slider');
-												wp_register_script('theme-timepicker', get_template_directory_uri() . '/js/jquery-ui-timepicker-addon.js', array('jquery','jquery-ui-datepicker'), '4.0',true); 
-												wp_enqueue_script('theme-timepicker');
-				   								wp_enqueue_style('jquery-ui-smoothnesspf', get_template_directory_uri() . "/css/jquery-ui.theme.min.css", false, null);
-												
-											}
 										/**
 										*Opening Hours
 										**/
@@ -1574,7 +1624,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										/**
 										*Locations
 										**/
-											if($setup3_pointposttype_pt5_check == 1 && $setup4_submitpage_locationtypes_check == 1){
+											if($is_editor && $setup3_pointposttype_pt5_check == 1 && $setup4_submitpage_locationtypes_check == 1){
 													
 													$stp4_loc_new = PFSAIssetControl('stp4_loc_new','','0');
 													$setup4_submitpage_locationtypes_title = PFSAIssetControl('setup4_submitpage_locationtypes_title','','Location');
@@ -1862,16 +1912,17 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										**/	
 											
 											if($st4_sp_med == 1){
-												$this->FieldOutput .= '<div class="pfsubmit-title pfsubmit-inner-sub-address">'.esc_html__('ADDRESS','pointfindert2d').'</div>';
+												$this->FieldOutput .= '<div class="pfsubmit-title pfsubmit-inner-sub-address">'.esc_html__('地址','pointfindert2d').'</div>';
 												$this->FieldOutput .= '<section class="pfsubmit-inner pfsubmit-inner-sub-address pfsubmit-address-errc">';
 
 											
 												$setup4_submitpage_maparea_title = PFSAIssetControl('setup4_submitpage_maparea_title','','');
 												$setup4_submitpage_maparea_tooltip = PFSAIssetControl('setup4_submitpage_maparea_tooltip','','');
-												
+/*jschen , remove lat and lng verification												
 
 												$this->PFValidationCheckWrite($st4_sp_med2,$setup4_submitpage_maparea_verror,'pfupload_lat');
 												$this->PFValidationCheckWrite($st4_sp_med2,$setup4_submitpage_maparea_verror,'pfupload_lng');
+*/
 												$this->PFValidationCheckWrite($st4_sp_med2,esc_html__('Please enter an address','pointfindert2d'),'pfupload_address');
 
 
@@ -1883,7 +1934,8 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 												$setup5_mapsettings_lat_text = $setup5_mapsettings_lng_text = '';
 
 												if($params['post_id'] != ''){
-													$coordinates = esc_attr(get_post_meta( $params['post_id'], 'webbupointfinder_items_location', true ));
+													$coordinates = get_post_meta( $params['post_id'], 'webbupointfinder_items_location', true );
+													
 													if(isset($coordinates)){
 														$coordinates = explode(',', $coordinates);
 														
@@ -1956,7 +2008,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										**/
 											if ($setup4_submitpage_imageupload == 1) {
 												$setup4_submitpage_status_old = PFSAIssetControl('setup4_submitpage_status_old','','0');
-												$this->FieldOutput .= '<div class="pfsubmit-title pfsubmit-inner-sub-image">'.esc_html__('IMAGE UPLOAD','pointfindert2d' ).'</div>';
+												$this->FieldOutput .= '<div class="pfsubmit-title pfsubmit-inner-sub-image">'.esc_html__('上传图片,为了更好展示图片，请您横向拍摄图片','pointfindert2d' ).'</div>';
 												$this->FieldOutput .= '<section class="pfsubmit-inner pfitemimgcontainer pferrorcontainer pfsubmit-inner-sub-image">';
 												
 												
@@ -2149,6 +2201,15 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 														       		$.pfuploadoldimages(0);
 													       		}
 													        };
+
+
+													        FeaturedfileInput.onready = function(e) {
+														        $('#pffeaturedimageuploadfilepicker').on('touchend',function(){
+														        	 $('#'+e.target.ruid).trigger('click');
+														        }); 
+													        };
+
+											        
 													        FeaturedfileInput.init();
 
 														/* Remove Featured Image Ajax */
@@ -2270,7 +2331,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 																	      	$this->FieldOutput .= 'addRemoveLinks:true,';
 																	      }
 																		$this->FieldOutput .= ' 
-																		dictDefaultMessage: "'.esc_html__( 'Drop files here to upload!','pointfindert2d').'<br/>'.esc_html__( 'You can add up to','pointfindert2d').' <div class=\'pfuploaddrzonenum\'>{0}</div> '.esc_html__( 'image(s)','pointfindert2d').' '.sprintf(esc_html__('(Max. File Size: %dMB per image)','pointfindert2d'),$setup4_submitpage_imagesizelimit).' ".format($.drzoneuploadlimit),
+																		dictDefaultMessage: "'.esc_html__( '','pointfindert2d').'<br/>'.esc_html__( '你可以最多上传','pointfindert2d').' <div class=\'pfuploaddrzonenum\'>{0}</div> '.esc_html__( '张图片','pointfindert2d').' '.sprintf(esc_html__('(最大%dMB 每张图片)','pointfindert2d'),$setup4_submitpage_imagesizelimit).' ".format($.drzoneuploadlimit),
 																		dictFallbackMessage: "'.esc_html__( 'Your browser does not support drag and drop file upload', 'pointfindert2d' ).'",
 																		dictInvalidFileType: "'.esc_html__( 'Unsupported file type', 'pointfindert2d' ).'",
 																		dictFileTooBig: "'.sprintf(esc_html__( 'File size is too big. (Max file size: %dmb)', 'pointfindert2d' ),$setup4_submitpage_imagesizelimit).'",
@@ -2313,10 +2374,72 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 																		
 																	});
 
-																	myDropzone.on("totaluploadprogress",function(uploadProgress){
-																		if (uploadProgress > 0) {
+function getOrientation(file, callback) {
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    var view = new DataView(event.target.result);
+    if (view.getUint16(0, false) != 0xFFD8) return callback(-2);
+    var length = view.byteLength,
+        offset = 2;
+    while (offset < length) {
+      var marker = view.getUint16(offset, false);
+      offset += 2;
+      if (marker == 0xFFE1) {
+        if (view.getUint32(offset += 2, false) != 0x45786966) {
+          return callback(-1);
+        }
+        var little = view.getUint16(offset += 6, false) == 0x4949;
+        offset += view.getUint32(offset + 4, little);
+        var tags = view.getUint16(offset, little);
+        offset += 2;
+        for (var i = 0; i < tags; i++)
+          if (view.getUint16(offset + (i * 12), little) == 0x0112)
+            return callback(view.getUint16(offset + (i * 12) + 8, little));
+      }
+      else if ((marker & 0xFF00) != 0xFF00) break;
+      else offset += view.getUint16(offset, false);
+    }
+    return callback(-1);
+  };
+  reader.readAsArrayBuffer(file.slice(0, 64 * 1024));
+};
+
+
+myDropzone.on("addedfile", function(origFile) {
+        getOrientation(origFile, function(orientation) {
+                var reader = new FileReader();
+                reader.addEventListener("load", function(event) {
+                        var origImg = new Image();
+                        origImg.src = event.target.result;
+                        origImg.addEventListener("load", function(event) {
+                                var w = event.target.width;
+                                var h = event.target.height;
+
+                                if ([5,6,7,9].indexOf(orientation) > -1) {
+                                        var t = w; w = h; h = t;
+                                }
+                                if (w > h ) {
+                                } else {
+                                        alert("为了保证显示效果，请选择横向的图片。如果您用手机拍摄图片，请横向拍摄图片");
+                                        myDropzone.removeFile(origFile);
+                                }
+                        });
+                });
+                reader.readAsDataURL(origFile);
+         });
+});
+
+
+
+																	myDropzone.on("totaluploadprogress",function(uploadProgress,totalBytes,totalBytesSent){
+																		
+																		if (uploadProgress > 0 ) {
 																			$("#pf-ajax-uploaditem-button").val("'.esc_html__( 'Please Wait for Image Upload...', 'pointfindert2d' ).'");
 																			$("#pf-ajax-uploaditem-button").attr("disabled", true);
+																		}
+																		if(totalBytes == 0) {
+																			$("#pf-ajax-uploaditem-button").attr("disabled", false);
+																			$("#pf-ajax-uploaditem-button").val("'.PFSAIssetControl('setup29_dashboard_contents_submit_page_menuname','','').'");
 																		}
 																	});
 																	';
@@ -2375,7 +2498,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 															})(jQuery);
 															</script>
 															
-															<a id="pf-ajax-fileuploadformopen" class="button pfmyitempagebuttonsex" style="width:100%"><i class="pfadmicon-glyph-512"></i> '.esc_html__( 'Click to select photos', 'pointfindert2d' ).'</a>
+															<a id="pf-ajax-fileuploadformopen" class="button pfmyitempagebuttonsex" style="width:100%"><i class="pfadmicon-glyph-512"></i> '.esc_html__( '手机拍照上传图片', 'pointfindert2d' ).'</a>
 															';
 															$this->FieldOutput .= '</section>';
 														}
@@ -2396,7 +2519,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										**/
 											
 
-											if ($stp4_fupl == 1) {
+											if ($is_editor && $stp4_fupl == 1) {
 												$this->FieldOutput .= '<div class="pfsubmit-title pfsubmit-inner-sub-file">'.esc_html__('ATTACHMENT UPLOAD','pointfindert2d' ).'</div>';
 												$this->FieldOutput .= '<section class="pfsubmit-inner pfitemfilecontainer pferrorcontainer pfsubmit-inner-sub-file">';
 												
@@ -2497,7 +2620,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 												$stp4_allowed = PFSAIssetControl("stp4_allowed","",'jpg,jpeg,gif,png,pdf,rtf,csv,zip, x-zip, x-zip-compressed,rar,doc,docx,docm,dotx,dotm,docb,xls,xlt,xlm,xlsx,xlsm,xltx,xltm,ppt,pot,pps,pptx,pptm');
 
 												$this->ScriptOutput .= "
-
+												
 												/*File upload featured image AJAX */
 													var PFfileInput = new mOxie.FileInput({
 											            browse_button: document.getElementById('pffeaturedfileuploadfilepicker'),
@@ -2505,6 +2628,9 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 											            accept: [{ title: 'Documents', extensions: '".$stp4_allowed."' }],
 											            multiple: true
 											        });
+													
+
+
 
 											        $.pfuploadedfilecount = 0;
 
@@ -2589,6 +2715,14 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 												       		$.pfuploadoldfiles(0);
 											       		}
 											        };
+
+													PFfileInput.onready = function(e) {
+												        $('#pffeaturedfileuploadcontainer').on('touchend',function(){
+												        	 $('#'+e.target.ruid).trigger('click');
+												        }); 
+											        };
+
+											        
 											        PFfileInput.init();
 
 												/* Remove Featured Files Ajax */
@@ -2641,15 +2775,15 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										/**
 										*Message to Reviewer
 										**/
-											if($setup4_submitpage_messagetorev == 1){
+											if($is_editor && $setup4_submitpage_messagetorev == 1){
 
-												$this->FieldOutput .= '<div class="pfsubmit-title">'.esc_html__('Message to Reviewer','pointfindert2d').'</div>';
+												$this->FieldOutput .= '<div class="pfsubmit-title">'.esc_html__('打折优惠','pointfindert2d').'</div>';
 												$this->FieldOutput .= '<section class="pfsubmit-inner">';
 												$this->FieldOutput .= '<section class="pfsubmit-inner-sub">';
 												$this->FieldOutput .= '
 							                        <label class="lbl-ui">
 							                        	<textarea id="item_mesrev" name="item_mesrev" class="textarea mini"></textarea>';
-												$this->FieldOutput .= '<b class="tooltip left-bottom"><em>'.esc_html__('OPTIONAL:','pointfindert2d').esc_html__('You can send a message to reviewer.','pointfindert2d').'</em></b>';
+												$this->FieldOutput .= '<b class="tooltip left-bottom"><em>'.esc_html__('OPTIONAL:','pointfindert2d').esc_html__('打折优惠','pointfindert2d').'</em></b>';
 												 
 							                    $this->FieldOutput .= '</label>';
 							                    $this->FieldOutput .= '</section>';                     
@@ -2665,30 +2799,30 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										*Featured Item 
 										**/
 											$featured_permission = true;
+                                            if ($is_editor) {
+    											if ($setup4_membersettings_paymentsystem == 2) {
+    												if ($params['formtype'] == 'edititem') {
+    													if ($packageinfo['webbupointfinder_mp_fitemnumber'] <= 0) {
+    														$featured_permission = false;
+    													}elseif ($membership_user_featureditem_limit <= 0 && $package_featuredcheck != 1) {
+    														$featured_permission = false;
+    													}
+    												}else{
+    													if ($membership_user_featureditem_limit <= 0) {
+    														$featured_permission = false;
+    													}
+    												}
+    											}else{
+    												if ($params['formtype'] == 'edititem') {
+    													$featured_permission = true;
+    												}
+    												if (PFSAIssetControl('setup31_userpayments_featuredoffer','','1') != 1) {
+    													$featured_permission = false;
+    												}
+    											}
+                                            }
 
-											if ($setup4_membersettings_paymentsystem == 2) {
-												if ($params['formtype'] == 'edititem') {
-													if ($packageinfo['webbupointfinder_mp_fitemnumber'] <= 0) {
-														$featured_permission = false;
-													}elseif ($membership_user_featureditem_limit <= 0 && $package_featuredcheck != 1) {
-														$featured_permission = false;
-													}
-												}else{
-													if ($membership_user_featureditem_limit <= 0) {
-														$featured_permission = false;
-													}
-												}
-											}else{
-												if ($params['formtype'] == 'edititem') {
-													$featured_permission = true;
-												}
-												if (PFSAIssetControl('setup31_userpayments_featuredoffer','','1') != 1) {
-													$featured_permission = false;
-												}
-											}
-
-
-											if ($featured_permission) {
+											if ($is_editor && $featured_permission) {
 												if ($setup4_membersettings_paymentsystem != 2) {
 
 													$setup31_userpayments_pricefeatured = PFSAIssetControl('setup31_userpayments_pricefeatured','','5');
@@ -2705,11 +2839,10 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 														if ($setup31_userpayments_pricefeatured == 0) {
 															$featured_price_output = '<span class="pfitem-featuredprice" title="'.sprintf(esc_html__('For %d %s','pointfindert2d' ),$stp31_daysfeatured,$featured_day_word).'">'.$stp31_daysfeatured.$featured_day_word.'</span>';
 														}else{
-															if ($setup20_paypalsettings_paypal_price_pref == 1) {
-																$featured_price_output = ' <span class="pfitem-featuredprice" title="'.sprintf(esc_html__('Price is %s for %d %s','pointfindert2d' ),$setup20_paypalsettings_paypal_price_short.$setup31_userpayments_pricefeatured,$stp31_daysfeatured,$featured_day_word).'">'.$setup20_paypalsettings_paypal_price_short.$setup31_userpayments_pricefeatured.' / '.$stp31_daysfeatured.$featured_day_word.'</span>';
-															}else{
-																$featured_price_output = ' <span class="pfitem-featuredprice" title="'.sprintf(esc_html__('Price is %s for %d %s','pointfindert2d' ),$setup31_userpayments_pricefeatured.$setup20_paypalsettings_paypal_price_short,$stp31_daysfeatured,$featured_day_word).'">'.$setup31_userpayments_pricefeatured.$setup20_paypalsettings_paypal_price_short.' / '.$stp31_daysfeatured.$featured_day_word.'</span>';
-															}
+
+															$setup31_userpayments_pricefeatured_rf = pointfinder_reformat_pricevalue_for_frontend($setup31_userpayments_pricefeatured);
+
+															$featured_price_output = ' <span class="pfitem-featuredprice" title="'.sprintf(esc_html__('Price is %s for %d %s','pointfindert2d' ),$setup31_userpayments_pricefeatured,$stp31_daysfeatured,$featured_day_word).'">'.$setup31_userpayments_pricefeatured_rf.' / '.$stp31_daysfeatured.$featured_day_word.'</span>';
 														}
 													}
 
@@ -2803,7 +2936,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										/**
 										*Select package
 										**/
-											if ($setup4_membersettings_paymentsystem == 1) {
+											if ($is_editor && $setup4_membersettings_paymentsystem == 1) {
 												
 												$stp31_up2_pn = PFSAIssetControl('stp31_up2_pn','','Basic Package');
 												$setup31_userpayments_priceperitem = PFSAIssetControl('setup31_userpayments_priceperitem','','10');
@@ -2863,17 +2996,19 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 
 													$status_package_selection = true;
 
+													
+
 													if ($ppp_packages > 0) {
+
 														foreach ($ppp_packages as $ppp_package) {
 															
 															if ($ppp_package['price'] == 0) {
 																$this_pack_price = esc_html__('Free','pointfindert2d');
 															}else{
-																if ($setup20_paypalsettings_paypal_price_pref == 1) {
-																	$this_pack_price = ' <span style="font-weight:600;" title="'.esc_html__('This package price is ','pointfindert2d' ).$setup20_paypalsettings_paypal_price_short.$ppp_package['price'].'">'.$setup20_paypalsettings_paypal_price_short.$ppp_package['price'].'</span>';
-																}else{
-																	$this_pack_price = ' <span style="font-weight:600;" title="'.esc_html__('This package price is ','pointfindert2d' ).$ppp_package['price'].$setup20_paypalsettings_paypal_price_short.'">'.$ppp_package['price'].$setup20_paypalsettings_paypal_price_short.'</span>';
-																}
+
+																$this_pack_price = pointfinder_reformat_pricevalue_for_frontend($ppp_package['price']);
+
+																$this_pack_price = ' <span style="font-weight:600;" title="'.esc_html__('This package price is ','pointfindert2d' ).$this_pack_price.'">'.$this_pack_price.'</span>';
 															}
 
 															if ($current_post_status == 'publish') {
@@ -2935,7 +3070,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										/**
 										*Total Cost
 										**/
-											if ($setup4_membersettings_paymentsystem == 1) {
+											if ($is_editor && $setup4_membersettings_paymentsystem == 1) {
 												
 												$this->FieldOutput .= '<div class="pfsubmit-title pfsubmit-inner-payment">'.esc_html__('Payment','pointfindert2d').'</div>';
 												$this->FieldOutput .= '<section class="pfsubmit-inner pfsubmit-inner-payment">';
@@ -2956,7 +3091,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										*Terms and conditions
 										**/
 											$setup4_ppp_terms = PFSAIssetControl('setup4_ppp_terms','','1');
-											if ($setup4_ppp_terms == 1) {
+											if ($is_editor && $setup4_ppp_terms == 1) {
 												if($this->VSOMessages != ''){
 													$this->VSOMessages .= ',pftermsofuser:"'.esc_html__( 'You must accept terms and conditions.', 'pointfindert2d' ).'"';
 												}else{
@@ -3000,8 +3135,12 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 										**/
 
 									$this->FieldOutput .= '</div>';
-
-
+									if (!$is_editor) {
+									    $this->ScriptOutput .= '$("#pf-ajax-uploaditem-button").show();';
+                                        $this->ScriptOutput .= '$(".pf-excludecategory-container").show();';
+                                        $this->ScriptOutput .= '$.pf_submit_page_map();';
+                                        
+									}
 								
 								/** 
 								*End : First Column (Map area, Image upload etc..)
@@ -3031,10 +3170,10 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 								$stp_prf_vat = PFSAIssetControl('stp_prf_vat','','1');
 								$stp_prf_country = PFSAIssetControl('stp_prf_country','','1');
 								$stp_prf_address = PFSAIssetControl('stp_prf_address','','1');
+								$stp_prf_city = PFSAIssetControl('stp_prf_city','','1');
 								
 								if(!isset($usermetaarr['first_name'])){$usermetaarr['first_name'][0] = '';}
 								if(!isset($usermetaarr['last_name'])){$usermetaarr['last_name'][0] = '';}
-								if(!isset($usermetaarr['user_phone'])){$usermetaarr['user_phone'][0] = '';}
 								if(!isset($usermetaarr['user_phone'])){$usermetaarr['user_phone'][0] = '';}
 								if(!isset($usermetaarr['user_mobile'])){$usermetaarr['user_mobile'][0] = '';}
 								if(!isset($usermetaarr['description'])){$usermetaarr['description'][0] = '';}
@@ -3046,6 +3185,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 								if(!isset($usermetaarr['user_vatnumber'])){$usermetaarr['user_vatnumber'][0] = '';}
 								if(!isset($usermetaarr['user_country'])){$usermetaarr['user_country'][0] = '';}
 								if(!isset($usermetaarr['user_address'])){$usermetaarr['user_address'][0] = '';}
+								if(!isset($usermetaarr['user_city'])){$usermetaarr['user_city'][0] = '';}
 
 								if(!isset($usermetaarr['user_photo'])){
 									$usermetaarr['user_photo'][0] = '<img src= "'.get_template_directory_uri().'/images/noimg.png">';
@@ -3224,6 +3364,17 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 			                                </section>     
 			                                ';
 		                            	}
+
+		                            	if (!empty($stp_prf_city)) {
+			                                $this->FieldOutput .= '
+			                                <section>
+			                                    <label for="city" class="lbl-text">'.esc_html__('City','pointfindert2d').':</label>
+			                                    <label class="lbl-ui">
+			                                    	<input type="text" name="city" class="input" value="'.$usermetaarr['user_city'][0].'"/>
+			                                    </label>
+			                                </section>     
+			                                ';
+		                            	}
 		                                $this->FieldOutput .= '     
 		                                                 
 		                           </div>
@@ -3263,8 +3414,6 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 							$noncefield = wp_create_nonce($formaction);
 							$buttonid = 'pf-ajax-itemrefine-button';
 							$setup4_membersettings_paymentsystem = PFSAIssetControl('setup4_membersettings_paymentsystem','','1');
-							$setup20_paypalsettings_paypal_price_short = PFSAIssetControl('setup20_paypalsettings_paypal_price_short','','$');
-								$setup20_paypalsettings_paypal_price_pref = PFSAIssetControl('setup20_paypalsettings_paypal_price_pref','',1);
 
 							if ($params['redirect']) {
 								echo '<script>window.location = "'.$setup4_membersettings_dashboard_link.$pfmenu_perout.'ua=myitems'.'";</script>';
@@ -3545,14 +3694,13 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 																$status_icon = 'pfadmicon-glyph-411';
 																$status_lbl = 'lblpending';
 															}else{
+/*jschen: remark, it will cause system crush 
 																if ($setup4_membersettings_paymentsystem == 2) {
 																	$status_text = esc_html__('Suspended','pointfindert2d');
 																} else {
-																	if ($setup20_paypalsettings_paypal_price_pref == 1) {
-																		$pf_price_output = $setup20_paypalsettings_paypal_price_short.$pointfinder_order_price;
-																	}else{
-																		$pf_price_output = $pointfinder_order_price.$setup20_paypalsettings_paypal_price_short;
-																	}
+												
+																	$pf_price_output = pointfinder_reformat_pricevalue_for_frontend($pointfinder_order_price);
+																	
 																	if ($pointfinder_order_price == 0) {
 																		$status_text = sprintf(esc_html__('Pending Payment %s Please edit this item and change plan.','pointfindert2d'),'<br/>');
 																	}else{
@@ -3562,8 +3710,8 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 																$status_payment = 0;
 																$status_icon = 'pfadmicon-glyph-411';
 																$status_lbl = 'lblpending';
+*/
 															}
-															
 															break;
 														
 														case 'rejected':
@@ -3590,8 +3738,20 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 															$status_icon = 'pfadmicon-glyph-411';
 															$status_lbl = 'lblcompleted';
 															break;
-													}
 
+														case 'pfonoff':
+															/*$status_text = esc_html__('Deactivated by user','pointfindert2d');
+															$status_lbl = 'lblpending';
+															$status_icon = 'pfadmicon-glyph-411';
+															$status_payment = 1;*/
+															if ($setup4_membersettings_paymentsystem == 2) {
+																$status_text = sprintf(esc_html__('Active until: %s','pointfindert2d'),$item_listing_expiry);
+															}
+															$status_payment = 1;
+															$status_icon = 'pfadmicon-glyph-411';
+															$status_lbl = 'lblcompleted';
+															break;
+													}
 
 													/*
 														Reviews Store in $review_output:
@@ -3647,20 +3807,27 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 													/*
 														View Count for item.
 													*/
-														$view_count_num = esc_attr(get_post_meta($author_post_id,"webbupointfinder_page_itemvisitcount",true));
-														if (!empty($view_count_num)) {
-															$view_outputx = $view_count_num;
-														}else{
-															$view_outputx = 0;
+														$viewcount_hideshow_f = PFSAIssetControl('viewcount_hideshow_f','',1);
+
+														if($viewcount_hideshow_f == 1){
+															$view_count_num = esc_attr(get_post_meta($author_post_id,"webbupointfinder_page_itemvisitcount",true));
+															if (!empty($view_count_num)) {
+																$view_outputx = $view_count_num;
+															}else{
+																$view_outputx = 0;
+															}
+															$view_output = '<span class="pfiteminfolist-title pfstatus-title pfreviews" title="'.esc_html__('Views','pointfindert2d').'"><i class="pfadmicon-glyph-729"></i></span>';
+															$view_output .= '<span class="pfiteminfolist-infotext pfreviews">'.$view_outputx.'</span>';
 														}
-														$view_output = '<span class="pfiteminfolist-title pfstatus-title pfreviews" title="'.esc_html__('Views','pointfindert2d').'"><i class="pfadmicon-glyph-729"></i></span>';
-														$view_output .= '<span class="pfiteminfolist-infotext pfreviews">'.$view_outputx.'</span>';
 					
 													$setup4_membersettings_loginregister = PFSAIssetControl('setup4_membersettings_loginregister','','1');
 
 
 												$this->FieldOutput .= '<div class="pfmu-itemlisting-inner pfmu-itemlisting-inner'.$author_post_id.' pf-row clearfix">';
-														
+														if ($status_of_post == 'pfonoff') {
+															$addthistextstyle = ' style="display:block"';
+														}else{$addthistextstyle = '';}
+														$this->FieldOutput .= '<div class="pfmu-itemlisting-inner-overlay pfmu-itemlisting-inner-overlay'.$author_post_id.'"'.$addthistextstyle.'></div>';
 														if (get_post_status($author_post_id) == 'publish') {
 															$permalink_item = get_permalink($author_post_id);
 														}else{
@@ -3689,9 +3856,8 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 														$this->FieldOutput .= '<a href="'.$permalink_item.'">'.get_the_title().'</a>';
 														$this->FieldOutput .= '</div>';
 
-
 														/*Status*/
-														$this->FieldOutput .= '<div class="pfmu-itemlisting-info pffirst">';
+														$this->FieldOutput .= '<div class="pfmu-itemlisting-info pfmu-itemlisting-info-'.$author_post_id.' pffirst" data-deactivatedt="'.esc_html__('Deactivated by user','pointfindert2d').'">';
 															$this->FieldOutput .= '<ul class="pfiteminfolist">';
 
 
@@ -3755,19 +3921,19 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 														$this->FieldOutput .= '<div class="pfmu-itemlisting-footer col-lg-3 col-md-3 col-sm-2 col-xs-12">';
 													    $this->FieldOutput .= '<ul class="pfmu-userbuttonlist">';
 
-													    if ($this->PF_UserLimit_Check('delete',$status_of_post) == 1) {
+													    if ($this->PF_UserLimit_Check('delete',$status_of_post) == 1 || $status_of_post == 'pfonoff') {
 															$this->FieldOutput .= '<li class="pfmu-userbuttonlist-item"><a class="button pf-delete-item-button wpf-transition-all pf-itemdelete-link" data-pid="'.$author_post_id.'" id="pf-delete-item-'.$author_post_id.'" title="'.esc_html__('Delete','pointfindert2d').'"><i class="pfadmicon-glyph-644"></i></a></li>';
 														}
 														
-														if($status_of_post == 'publish'){
+														if($status_of_post == 'publish' || $status_of_post == 'pfonoff'){
 															$this->FieldOutput .= '<li class="pfmu-userbuttonlist-item"><a class="button pf-view-item-button wpf-transition-all" href="'.$permalink_item.'" title="'.esc_html__('View','pointfindert2d').'"><i class="pfadmicon-glyph-410"></i></a></li>';
 														}
 
-														if ($this->PF_UserLimit_Check('edit',$status_of_post) == 1 && $status_of_order != 'pfsuspended') {
+														if (($this->PF_UserLimit_Check('edit',$status_of_post) == 1 && $status_of_order != 'pfsuspended') || ($this->PF_UserLimit_Check('edit',$status_of_post) == 1 && $status_of_post == 'pfonoff')) {
 															
 															$show_edit_button = 1;
 
-															if ($setup4_membersettings_paymentsystem == 2 && $status_of_post == 'pendingpayment') {
+															if (($setup4_membersettings_paymentsystem == 2 && $status_of_post == 'pendingpayment') || ($setup4_membersettings_paymentsystem == 2 && $status_of_post == 'pfonoff')) {
 																$show_edit_button = 0;
 															}
 															if ($show_edit_button == 1) {
@@ -3841,12 +4007,16 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 																		       			$this->FieldOutput .= '<option value="robo">'.esc_html__('Robokassa','pointfindert2d').'</option>';
 																		       		}
 
+																		       		if (($pointfinder_order_recurring != 1 && $pointfinder_order_frecurring != 1) && PFPGIssetControl('iyzico_status','',0) == 1) {
+																		       			$this->FieldOutput .= '<option value="iyzico">'.esc_html__('Iyzico','pointfindert2d').'</option>';
+																		       		}
+
 																		       		if(($pointfinder_order_recurring != 1 && $pointfinder_order_frecurring != 1) && PFSAIssetControl('setup20_paypalsettings_bankdeposit_status','',0) == 1){
 																		       			$this->FieldOutput .= '<option value="'.$setup4_membersettings_dashboard_link.$pfmenu_perout.'ua=myitems&action=pf_pay2&i='.$author_post_id.'">'.esc_html__('BANK TRANS.','pointfindert2d').'</option>';
 																		       		}
 
 																		        $this->FieldOutput .= '</select>';
-																		        
+																		       
 																	        $this->FieldOutput .= '</label>';
 
 																        $this->FieldOutput .= '</div>';
@@ -3868,6 +4038,8 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 													           
 													        	}elseif ($status_payment == 0 && $pointfinder_order_price == 0 && $stp31_userfree == 1) {
 													        		/*If user is free user then extend it free.*/
+/*jschen remark, user cannot change the status of a listing
+
 													        		$this->FieldOutput .= '<div class="col-lg-12">';
 														            		$this->FieldOutput .= '<div class="pfcanceltext">';
 														            		$this->FieldOutput .= '<label class="lbl-text">
@@ -3875,6 +4047,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 														            		$this->FieldOutput .= '</label>';
 														            		$this->FieldOutput .= '</div>';
 														            	$this->FieldOutput .= '</div>';
+*/
 													        	}
 															}else{
 																$this->FieldOutput .= '<div class="pfmu-payment-area golden-forms pf-row clearfix">';
@@ -3911,9 +4084,12 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 														}
 
 														/** View: show **/
-														$this->FieldOutput .= '<li>';
-														$this->FieldOutput .= $view_output;
-														$this->FieldOutput .= '</li>';
+														if ($viewcount_hideshow_f == 1) {
+															$this->FieldOutput .= '<li>';
+															$this->FieldOutput .= $view_output;
+															$this->FieldOutput .= '</li>';
+														}
+														
 
 														if ($featured_enabled == 1) {
 															$pf_featured_exptime = get_post_meta( $result_id, 'pointfinder_order_expiredate_featured', true );
@@ -3940,18 +4116,20 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 														}
 
 														/** on/off: show **/
-														$current_status_onoff = get_post_meta( $author_post_id, "pointfinder_item_onoffstatus", true );
-														if (empty($current_status_onoff)) {
+														$old_post_status = get_post_status($author_post_id);
+														if ($old_post_status != 'pfonoff') {
 															$onoff_text = 'pfstatusbuttonactive';
 															$onoff_word = esc_html__("Your listing is active","pointfindert2d" );
 														}else{
 															$onoff_text = 'pfstatusbuttondeactive';
 															$onoff_word = esc_html__("Your listing is deactive","pointfindert2d" );
 														}
-
-														$this->FieldOutput .= '<li>';
-														$this->FieldOutput .= '<span data-pfid="'.$author_post_id.'" class="pfiteminfolist-title pfstatus-title '.$onoff_text.' pfstatusbuttonaction" title="'.$onoff_word.'" data-pf-deactive="'.esc_html__("Your listing is deactive","pointfindert2d" ).'" data-pf-active="'.esc_html__("Your listing is active","pointfindert2d" ).'"><i class="pfadmicon-glyph-348"></i></span>';
-														$this->FieldOutput .= '</li>';
+														if (!in_array($status_of_post, array('pendingapproval','pendingpayment','rejected'))) {
+															$this->FieldOutput .= '<li>';
+														
+															$this->FieldOutput .= '<span data-pfid="'.$author_post_id.'" class="pfiteminfolist-title pfstatus-title '.$onoff_text.' pfstatusbuttonaction" title="'.$onoff_word.'" data-pf-deactive="'.esc_html__("Your listing is deactive","pointfindert2d" ).'" data-pf-active="'.esc_html__("Your listing is active","pointfindert2d" ).'"><i class="pfadmicon-glyph-348"></i></span>';
+															$this->FieldOutput .= '</li>';
+														}
 
 													$this->FieldOutput .= '
 													</ul>
@@ -4682,6 +4860,7 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 
 										
 										$inv_prefix = PFASSIssetControl('setup_invoices_prefix','','PFI');
+										$setup20_paypalsettings_paypal_price_short = PFSAIssetControl('setup20_paypalsettings_paypal_price_short','','$');
 
 										while ( $output_loop->have_posts() ) {
 											$output_loop->the_post(); 
@@ -4689,6 +4868,10 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 											$author_post_id = get_the_ID();
 											$pf_inv_type = get_post_meta( $author_post_id,'pointfinder_invoice_invoicetype', true );
 											$price_val_inv = get_post_meta( $author_post_id, 'pointfinder_invoice_amount', true );
+											
+											if (strpos($price_val_inv, $setup20_paypalsettings_paypal_price_short) === false) {
+												$price_val_inv =  ($price_val_inv != 0)?pointfinder_reformat_pricevalue_for_frontend((int)$price_val_inv):0;
+											}
 
 												switch (get_post_status()) {
 													case 'publish':
@@ -5040,6 +5223,19 @@ if ( ! class_exists( 'PF_Frontend_Fields' ) ){
 								
 								case 'delete':
 									$output = (PFSAIssetControl('setup31_userlimits_userdelete_pendingapproval','','1') == 1) ? 1 : 0 ;
+									break;
+							}
+
+						break;
+
+					case 'pfonoff':
+							switch ($action) {
+								case 'edit':
+									$output = (PFSAIssetControl('setup31_userlimits_useredit','','1') == 1) ? 1 : 0 ;
+									break;
+								
+								case 'delete':
+									$output = (PFSAIssetControl('setup31_userlimits_userdelete','','1') == 1) ? 1 : 0 ;
 									break;
 							}
 
