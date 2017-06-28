@@ -312,22 +312,9 @@ function pf_itemgrid2_func_new( $atts ) {
 								ON location.post_id = " . $wpdb->prefix ."posts.ID and location.meta_key='webbupointfinder_items_location'";
 					return $join_paged_statement;	
 				}
-				
-				if ($pfg_orderby =='' && $pfgetdata['orderby'] =='') {
-						$pfg_orderby = $setup22_searchresults_defaultsortbytype;
-						$pfg_order = $setup22_searchresults_defaultsorttype;
-				}
 	
         if($pfg_orderby != ''){
-						if ($pfg_orderby =='recommend') {
-								add_filter('posts_orderby', 'feature_sort');
-								add_filter('posts_join_paged', 'feature_join');
-						}
-						elseif ($pfg_orderby =='distance') {
-								add_filter('posts_orderby', 'edit_posts_orderby');
-								add_filter('posts_join_paged', 'edit_posts_join_paged');
-									
-						} elseif($pfg_orderby == 'date' || $pfg_orderby == 'title' ){
+						if($pfg_orderby == 'date' || $pfg_orderby == 'title' || $pfg_orderby == 'recommend' || $pfg_orderby=='distance'){
                 $args['orderby'] = array( $pfg_orderby => 'desc');
                 if (!empty($pfgetdata['manual_args'])) {
                    $pfgetdata['manual_args']['orderby'] = array( $pfg_orderby => 'desc');
@@ -353,15 +340,24 @@ function pf_itemgrid2_func_new( $atts ) {
                 }
             }
         }else{
-
             if($pfgetdata['orderby'] != ''){
                 $args['orderby'] = array($pfgetdata['orderby'] => $pfgetdata['sortby']);
+								$pfg_orderby = $pfgetdata['orderby'] ;
             }else{
-                $args['meta_key'] = $meta_key_featured;
-                $args['orderby'] = array('meta_value_num' => 'DESC' , $setup22_searchresults_defaultsortbytype => $setup22_searchresults_defaultsorttype);
+                $args['orderby'] = array($setup22_searchresults_defaultsortbytype => $setup22_searchresults_defaultsorttype);
+								$pfg_orderby = $setup22_searchresults_defaultsortbytype;
             }
         }
 
+				if ($pfg_orderby =='recommend') {
+								add_filter('posts_orderby', 'feature_sort');
+								add_filter('posts_join_paged', 'feature_join');
+				}
+				elseif ($pfg_orderby =='distance') {
+								add_filter('posts_orderby', 'edit_posts_orderby');
+								add_filter('posts_join_paged', 'edit_posts_join_paged');
+				}
+						
 
         if($pfg_number != ''){
             $args['posts_per_page'] = $pfg_number;
@@ -650,12 +646,13 @@ function pf_itemgrid2_func_new( $atts ) {
         $wpflistdata .= '<li>';
         $wpflistdata .= '<label for="pfsearch-filter" class="lbl-ui select pfsortby">';
         $wpflistdata .= '<select class="pfsearch-filter" name="pfsearch-filter" id="pfsearch-filter">';
-
+/*
         if($args['orderby'] == 'ID' && $args['orderby'] != 'meta_value_num' && $args['orderby'] != 'meta_value'){
             $wpflistdata .= '<option value="" selected>'.esc_html__('SORT BY','pointfindert2d').'</option>';
         }else{
             $wpflistdata .= '<option value="">'.esc_html__('SORT BY','pointfindert2d').'</option>';
         }
+*/
 
 				//jschen
         $pfgform_values3 = array('recommend','distance', 'date');
