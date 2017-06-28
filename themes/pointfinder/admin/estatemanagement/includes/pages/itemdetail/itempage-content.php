@@ -135,7 +135,7 @@ function PFGetItemPageCol1(){
 	}
 
 	if ($setup3_modulessetup_headersection == 1 || $setup3_modulessetup_headersection == 2 ) {
-		echo '<div class="pf-item-title-bar"><span class="pf-item-title-text" itemprop="name">'.get_the_title().'</span> <span class="pf-item-subtitle"> '.esc_html(get_post_meta( get_the_id(), 'webbupointfinder_items_address', true )).'</span></div><div class="pf-item-extitlebar"><div class="pf-itemdetail-pdate">'.$postd_text.$viewcount_text.' '.$verified_badge_text.'</div></div>'; 
+		echo '<div class="pf-item-title-bar"><span class="pf-item-title-text" itemprop="name">'.get_the_title().'</span> <span class="pf-item-subtitle"> '.esc_html(pf_get_address_with_distance( get_the_id(), 'webbupointfinder_items_address', true )).'</span></div><div class="pf-item-extitlebar"><div class="pf-itemdetail-pdate">'.$postd_text.$viewcount_text.' '.$verified_badge_text.'</div></div>'; 
 	}elseif($setup3_modulessetup_headersection == 0){
 		echo '<div class="pf-item-title-bar">'.$verified_badge_text.'<div class="pf-itemdetail-pdate">'.$postd_text.$viewcount_text.'</div></div>'; 
 	}
