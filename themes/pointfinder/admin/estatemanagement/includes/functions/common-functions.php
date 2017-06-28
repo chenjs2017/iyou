@@ -1,4 +1,102 @@
 <?php
+function pf_get_location() {
+	if (isset($_SESSION['agl-values']))
+	{
+		return $_SESSION ['agl-values'];
+	}
+  $cookie = isset($_COOKIE['agl-values']) ? $_COOKIE['agl-values'] : '';
+	if ($cookie !='') {
+		$cookie = stripslashes($cookie) ;
+		$vals = json_decode($cookie, true);
+		$lon = isset($vals['lon']) ? $vals['lon']:'';
+		$lat = isset($vals['lat']) ? $vals['lat']:'';
+		if (strlen($lat) > 0 && strlen($lon) >0 )
+		{
+			$_SESSION['agl-values'] = $vals;	
+			return $vals;
+		}
+	}
+	
+		if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+        $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    $url = 'http://ip-api.com/json/' . $ip;
+    $content = file_get_contents($url);
+    $json = json_decode($content, true);
+		$_SESSION['agl-values'] = $json;	
+		return $json;
+}
+function get_near_by() {
+	$cookie = isset($_COOKIE['agl-values']) ? $_COOKIE['agl-values'] : '';
+	$cookie = stripslashes($cookie);
+//jschen, return nearby info
+  if ($cookie !='') {
+		//require_once(get_theme_root() . '/pointfinder-child-theme/includes/location_check.php');
+    $vals = json_decode($cookie, true);
+    $latitude = $vals['lat'];
+    $longitude = $vals['lon'];
+    $has_location = true;
+		$miles=PFASSIssetControl('as_search_distance','',1);;
+  	$zcdRadius = new RadiusCheck($latitude, $longitude, $miles);
+                  $minLat = $zcdRadius->MinLatitude();
+                  $maxLat = $zcdRadius->MaxLatitude();
+                  $minLong = $zcdRadius->MinLongitude();
+                  $maxLong = $zcdRadius->MaxLongitude();
+		if ($minLong < 0  and $maxLong < 0) {
+			$temp = $minLong;
+			$minLong = $maxLong;
+			$maxLong = $temp;
+		}
+		if ($minLat < 0  and $maxLat < 0) {
+			$temp = $minLat;
+			$minLat = $maxLat;
+			$maxLat = $temp;
+		}
+		global $wpdb;
+		$sql = "SELECT  count(*) as post_count, $wpdb->terms.term_id as term_id, name FROM $wpdb->posts 
+				INNER JOIN $wpdb->term_relationships ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id) 
+				inner join $wpdb->term_taxonomy on ($wpdb->term_relationships.term_taxonomy_id=$wpdb->term_taxonomy.term_taxonomy_id)
+				INNER JOIN $wpdb->terms on ($wpdb->terms.term_id= $wpdb->term_taxonomy.term_id)
+				INNER JOIN $wpdb->postmeta AS mt1 ON ( $wpdb->posts.ID = mt1.post_id ) 
+				INNER JOIN $wpdb->postmeta AS mt2 ON ( $wpdb->posts.ID = mt2.post_id ) 
+				WHERE taxonomy='pointfinderltypes'
+				AND  ( mt1.meta_key = 'latitude' AND CAST(mt1.meta_value AS CHAR) BETWEEN '" . $minLat . "' AND '" . $maxLat . "' ) 
+				AND ( mt2.meta_key = 'longitude' AND CAST(mt2.meta_value AS CHAR) BETWEEN '" . $minLong . "' AND '" . $maxLong . "' ) 
+				AND $wpdb->posts.post_type = 'listing' AND $wpdb->posts.post_status = 'publish'
+				group by $wpdb->terms.term_id,name";
+		$result = $wpdb->get_results($sql, OBJECT);
+		$output ="在您身边发现：";
+		foreach( $result as $obj ) {
+				$url = '/?field_listingtype='. $obj->term_id .'&pfsearch-filter=distance&pointfinder_radius_search=1&ne=&ne2=&sw=&sw2=&s=&serialized=1&action=pfs';
+				$output .= '<a href="'. $url .'">'. $obj->name .'&nbsp;'.  $obj->post_count .'个 </a> &nbsp;&nbsp;|&nbsp;&nbsp;';
+    }
+  }
+	return $output;
+}
+
+function Calculate($lat1, $lon1, $lat2, $lon2) {
+  $theta = $lon1 - $lon2;
+  $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+  $dist = acos($dist);
+  $dist = rad2deg($dist);
+  $miles = $dist * 60 * 1.1515;
+  return $miles;
+}
+function pf_get_address_with_distance($pfitemid) {
+	$vals = pf_get_location();
+	if ($vals != false) {
+			$location = esc_html(get_post_meta( $pfitemid, 'webbupointfinder_items_location', true ));
+			$arr = explode(',', $location );
+			$lat = $arr[0]; 
+			$lon = $arr[1];
+			$dis = Calculate($lat, $lon, $vals['lat'], $vals['lon']);
+			$dis = number_format($dis, 2, '.', ' ');
+			$addr = '[' . $dis . '英里]' . $addr;
+	}	
+	return $addr;
+}
 
 /**********************************************************************************************************************************
 *
