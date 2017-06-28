@@ -1337,6 +1337,8 @@ if (!class_exists("Redux_Framework_PF_Theme_Config")) {
 								'type' => 'select',
 								'title' => esc_html__('Default: Sortby Type', 'pointfindert2d') ,
 								'options' => array(
+									'recommend' => esc_html__('Recommend', 'pointfindert2d') ,
+									'distance' => esc_html__('Distance', 'pointfindert2d') ,
 									'title' => esc_html__('Title', 'pointfindert2d') ,
 									'ID' => esc_html__('ID', 'pointfindert2d') ,
 									'date' => esc_html__('Date', 'pointfindert2d') ,
