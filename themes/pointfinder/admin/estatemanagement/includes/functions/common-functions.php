@@ -1,32 +1,71 @@
 <?php
-function pf_get_location() {
-	if (isset($_SESSION['agl-values']))
-	{
-		return $_SESSION ['agl-values'];
+function unset_as_empty(&$arr, &$key) {
+	return isset($arr[$key]) ? $arr[$key] : null;
+}
+
+function cookie_as_empty($key) {
+	return unset_as_empty($_COOKIE, $key);
+}
+
+function session_as_empty($key) {
+	return unset_as_empty($_SESSION, $key);
+}
+
+function get_as_empty($key) {
+	return unset_as_empty($_GET, $key);
+}
+
+function pf_check_location(&$vals) {
+		$lon = isset($vals['lon']) ? $vals['lon']:'';
+		$lat = isset($vals['lat']) ? $vals['lat']:'';
+		if (strlen($lat) > 0 && strlen($lon) >0 ) {
+			return true ;
+		}
+		return false;
+}
+
+function pf_save_location($lat, $lon, $addr){
+	$response = array(
+			'lat' => $lat,
+			'lon' => $lon,
+			'addr' => $addr
+		);
+	if($response ['lat'] !='' && $response['lon'] != '') {
+		$_SESSION['agl-values'] = $response;
+//		setcookie( 'agl-values', json_encode( $response ), time() + ( 3600 ), COOKIEPATH, COOKIE_DOMAIN );
 	}
+}
+
+function pf_get_location() {
+/*
   $cookie = isset($_COOKIE['agl-values']) ? $_COOKIE['agl-values'] : '';
 	if ($cookie !='') {
 		$cookie = stripslashes($cookie) ;
 		$vals = json_decode($cookie, true);
-		$lon = isset($vals['lon']) ? $vals['lon']:'';
-		$lat = isset($vals['lat']) ? $vals['lat']:'';
-		if (strlen($lat) > 0 && strlen($lon) >0 )
-		{
-			$_SESSION['agl-values'] = $vals;	
+		if (pf_check_location($val)) {
 			return $vals;
 		}
 	}
-	
-		if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
-        $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
-    } else {
-        $ip = $_SERVER['REMOTE_ADDR'];
-    }
-    $url = 'http://ip-api.com/json/' . $ip;
-    $content = file_get_contents($url);
-    $json = json_decode($content, true);
-		$_SESSION['agl-values'] = $json;	
-		return $json;
+*/	
+	if (isset($_SESSION['agl-values'])) {
+		$vals = $_SESSION['agl-values'];
+		if (pf_check_location($vals)) {
+			return $vals;
+		}
+	}
+
+	if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+      $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+  } else {
+      $ip = $_SERVER['REMOTE_ADDR'];
+  }
+  $url = 'http://ip-api.com/json/' . $ip;
+  $content = file_get_contents($url);
+  $vals = json_decode($content, true);
+	$address = $vals['city'] . ',' . $vals['region'] . ',' . $vals['country'];
+	$vals['addr'] = $address;
+	$_SESSION['agl-values'] = $vals;	
+	return $vals;
 }
 function get_near_by() {
 	$cookie = isset($_COOKIE['agl-values']) ? $_COOKIE['agl-values'] : '';
