@@ -588,7 +588,10 @@ function PFGetItemPageCol1(){
 			case 'location':
 				$tabinside = '';
 				if ($value['status'] == 1 && pf_get_listingmeta_limit($listing_meta, $item_term, 'pf_address_area') == 1) {
-					
+					$arr = pf_get_location();
+					$lat = $arr['lat'];
+					$lon = $arr['lon'];	
+					$addr = $arr['addr'];
 					/** 
 					*Start: Map 
 					**/
@@ -613,7 +616,7 @@ function PFGetItemPageCol1(){
 										$tabinside .= '<section>
 							                            <label class="lbl-ui gdlocations">
 							                            	<input type="hidden" name="gdlocationend" id="gdlocationend" value="'.esc_html(get_post_meta( get_the_id(), 'webbupointfinder_items_address', true )).'">
-							                            	<input type="text" name="gdlocations" id="gdlocations" class="input" placeholder="'.esc_html__('Enter Location','pointfindert2d').'">
+							                            	<input type="text" value="'. $addr . '" name="gdlocations" id="gdlocations" class="input" placeholder="'.esc_html__('Enter Location','pointfindert2d').'">
 							                            	<a class="button" id="pf_gdirections_geolocateme">
 															<img src="'.get_template_directory_uri().'/images/geoicon.svg" width="16px" height="16px" class="pf-gdirections-locatemebut" alt="'.esc_html__('Locate me!','pointfindert2d').'">
 															<div class="pf-search-locatemebutloading"></div>
