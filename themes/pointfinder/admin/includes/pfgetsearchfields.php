@@ -1345,7 +1345,7 @@ if ( ! class_exists( 'PF_SF_Val' ) ){
 											if ($hormode == 1) {
 												$this->FieldOutput .= '<div class="col-lg-3 col-md-4 col-sm-4 colhorsearch">';
 											}
-											$this->FieldOutput .= '
+										$this->FieldOutput .= '
 											<div id="'.$slug.'_main" class="pfmapgoogleaddon">
 												<label for="'.$slug.'" class="pftitlefield">'.$fieldtext.'</label>
 												<label class="pflabelfixsearch lbl-ui search">
@@ -1437,25 +1437,27 @@ if ( ! class_exists( 'PF_SF_Val' ) ){
 
 											$nefv = $ne2fv = $swfv = $sw2fv = $pointfinder_google_search_coord1 = '';
 
-											if (isset($_GET['pointfinder_google_search_coord'])) {$pointfinder_google_search_coord1 = $_GET['pointfinder_google_search_coord'];}
+										//	if (isset($_GET['pointfinder_google_search_coord'])) {$pointfinder_google_search_coord1 = $_GET['pointfinder_google_search_coord'];}
 											
 											if ($minisearch == 1) {
 												$statustextform2 = 'class="pfminigoogleaddon"';
 											}else{$statustextform2 = 'class="pfwidgetgoogleaddon"';}
+
+											$vals = pf_get_location();
+											$pointfinder_google_search_coord1 = $vals['lat'] . ',' . $vals['lon'];
+											
 											$this->FieldOutput .= '
 											<div id="pf-widget-map" style="display:none;"></div>
 											<div id="'.$slug.'_main" '.$statustextform2.'>
 												<label for="'.$slug.'" class="pftitlefield">'.$fieldtext.'</label>
 												<label class="pflabelfixsearch lbl-ui search">
-													<input type="search" name="'.$slug.'" id="'.$slug.'" class="input" placeholder="'.$placeholder.'"'.$valtext.' />
+													<input type="search" value="'. $vals['addr'] . '" name="'.$slug.'" id="'.$slug.'" class="input" placeholder="'.$placeholder.'"'.$valtext.' />
 													<input type="hidden" name="pointfinder_google_search_coord" id="pointfinder_google_search_coord" class="input" value="'.$pointfinder_google_search_coord1.'" />
 													<input type="hidden" name="pointfinder_google_search_coord_unit" id="pointfinder_google_search_coord_unit" class="input" value="'.$geolocfield.'" />
 													<a class="button" id="pf_search_geolocateme" title="'.esc_html__('Locate me!','pointfindert2d').'"><img src="'.get_template_directory_uri().'/images/geoicon.svg" width="16px" height="16px" class="pf-search-locatemebut" alt="'.esc_html__('Locate me!','pointfindert2d').'"><div class="pf-search-locatemebutloading"></div></a>
-													<a class="button" id="pf_search_geodistance" title="'.esc_html__('Distance','pointfindert2d').'"><i class="pfadmicon-glyph-72"></i></a>
 												</label> 
 											';
 
-											
 											if (isset($_GET['ne'])) {$nefv = $_GET['ne'];}
 											if (isset($_GET['ne2'])) {$ne2fv = $_GET['ne2'];}
 											if (isset($_GET['sw'])) {$swfv = $_GET['sw'];}
@@ -1486,10 +1488,8 @@ if ( ! class_exists( 'PF_SF_Val' ) ){
 													<input type="hidden" name="sw" id="pfw-sw" class="input" value="'.$swfv.'" />
 													<input type="hidden" name="sw2" id="pfw-sw2" class="input" value="'.$sw2fv.'" />
 												</div> 
-
-											</div>                        
 											';
-											
+											$this->FieldOutput .= '</div>';
 											$this->ScriptOutput .= "
 
 											$(function(){
