@@ -116,6 +116,15 @@ function pf_itemgrid2_func_new( $atts ) {
     if(isset($_GET['pfsearch-filter-itype']) && !empty($_GET['pfsearch-filter-itype'])){$pfg_itype = esc_attr($_GET['pfsearch-filter-itype']);}
     if(isset($_GET['pfsearch-filter-location']) && !empty($_GET['pfsearch-filter-location'])){$pfg_lotype = esc_attr($_GET['pfsearch-filter-location']);}
 
+		//jchen: save current location
+		$coor = get_as_empty('pointfinder_google_search_coord');
+		$addr = get_as_empty('field296725954161956900000');
+		if ($coor !='' && $addr !='') {
+			$arr=explode(',',$coor);
+			if (sizeof($arr) > 1) {
+				pf_save_location($arr[0], $arr[1], $addr);
+			}
+		}
 
 
     if ( is_front_page() ) {
@@ -128,7 +137,6 @@ function pf_itemgrid2_func_new( $atts ) {
 
     if($pfgetdata['posts_in']!=''){
         $args['post__in'] = pfstring2BasicArray($pfgetdata['posts_in']);
-
     }
 
 
@@ -304,9 +312,9 @@ function pf_itemgrid2_func_new( $atts ) {
 				function edit_posts_join_paged($join_paged_statement, $add_feature = false) {
 					global $wpdb;
 					if ($add_feature) {
-						$join_paged_statement .= " inner JOIN " . $wpdb->prefix . "postmeta 
-								ON " . $wpdb->prefix ."postmeta.post_id =" . $wpdb->prefix ."posts.ID 
-								and " . $wpdb->prefix . "postmeta.meta_key='webbupointfinder_item_featuredmarker'";
+						$join_paged_statement .= " inner JOIN " . $wpdb->prefix . "postmeta feature
+								ON feature.post_id =" . $wpdb->prefix ."posts.ID 
+								and feature.meta_key='webbupointfinder_item_featuredmarker'";
 					}
 					$join_paged_statement .= " inner JOIN ". $wpdb->prefix."postmeta location 
 								ON location.post_id = " . $wpdb->prefix ."posts.ID and location.meta_key='webbupointfinder_items_location'";
@@ -464,14 +472,13 @@ function pf_itemgrid2_func_new( $atts ) {
         'compare' => 'NOT EXISTS'
     );*/
 
-
     /* Start: Coordinate Filter */
     if (empty($pfgetdata['manual_args'])) {
         $loop = new WP_Query( $args );
     }else{
 
         /*If coordinatefilter on*/
-        if ((!empty($sw) && !empty($sw2) && !empty($ne) && !empty($ne2))) {
+        if ((false && !empty($sw) && !empty($sw2) && !empty($ne) && !empty($ne2))) {
             $loop_ex_posts = array();
             $args2 = $pfgetdata['manual_args'];
             $args2['posts_per_page'] = -1;
@@ -498,8 +505,9 @@ function pf_itemgrid2_func_new( $atts ) {
         $loop = new WP_Query( $pfgetdata['manual_args'] );
     }
     /* End: Coordinate Filter */
-
-		//jschen, 
+		//jchen, 
+//		echo $loop->request;	
+//		print_r($pfgetdata['manual_args']);	
 		remove_filter('posts_orderby', 'edit_posts_orderby');
 		remove_filter('posts_join_paged','edit_posts_join_paged');
 		remove_filter('posts_orderby', 'feature_sort');
