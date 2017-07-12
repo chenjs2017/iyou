@@ -288,6 +288,16 @@ function pf_itemgrid2_func_new( $atts ) {
         }
 
 				//jschen
+				function intercept_query_clauses( $pieces ){
+//					echo '$pieces where' ;
+//					print_r( $pieces['where']);
+					$keyword = isset($_REQUEST['jobskeyword']) ? $_REQUEST['jobskeyword'] : '';
+					if ($keyword != ''){
+						$pieces['where'] .= " and (match(post_title,post_content) against ('" . $keyword . "'))";
+					}
+					return $pieces;
+				}
+
 				function feature_sort($content) {
 					return edit_posts_orderby($content, true);
 				}
@@ -302,6 +312,10 @@ function pf_itemgrid2_func_new( $atts ) {
 					$orderby_statement = '';
 					if ($add_feature) {
 						$orderby_statement .= $wpdb->prefix . "postmeta.meta_value*1 desc,";
+						$keyword = isset($_REQUEST['jobskeyword']) ? $_REQUEST['jobskeyword'] : '';
+						if($keyword !='') {
+							$orderby_statement .= "(match(post_title,post_content) against ('" . $keyword . "')) desc,";
+						}	
 					}
 					$orderby_statement .= $distance_field;
 					return $orderby_statement;
@@ -365,6 +379,8 @@ function pf_itemgrid2_func_new( $atts ) {
 								add_filter('posts_orderby', 'edit_posts_orderby');
 								add_filter('posts_join_paged', 'edit_posts_join_paged');
 				}
+				
+				
 						
 
         if($pfg_number != ''){
@@ -501,6 +517,13 @@ function pf_itemgrid2_func_new( $atts ) {
             }
             wp_reset_postdata();
         }
+				$keyword = isset($pfgetdata['manual_args']['search_prod_title']) ?$pfgetdata['manual_args']['search_prod_title']: '';
+		
+				if($keyword != '') {
+						unset($pfgetdata['manual_args']['search_prod_title']);
+						add_filter( 'posts_clauses', 'intercept_query_clauses');
+				}
+
 
         $loop = new WP_Query( $pfgetdata['manual_args'] );
     }
@@ -512,6 +535,7 @@ function pf_itemgrid2_func_new( $atts ) {
 		remove_filter('posts_join_paged','edit_posts_join_paged');
 		remove_filter('posts_orderby', 'feature_sort');
 		remove_filter('posts_join_paged','feature_join');
+		remove_filter('posts_clauses', 'intercept_query_clauses');
 						
 
 
