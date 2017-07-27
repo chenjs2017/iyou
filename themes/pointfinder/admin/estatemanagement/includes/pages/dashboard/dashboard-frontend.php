@@ -2795,11 +2795,11 @@ myDropzone.on("addedfile", function(origFile) {
 										**/
 
 
+										if (false ) {
 										/** 
 										*Featured Item 
 										**/
 											$featured_permission = true;
-                                            if ($is_editor) {
     											if ($setup4_membersettings_paymentsystem == 2) {
     												if ($params['formtype'] == 'edititem') {
     													if ($packageinfo['webbupointfinder_mp_fitemnumber'] <= 0) {
@@ -2820,9 +2820,8 @@ myDropzone.on("addedfile", function(origFile) {
     													$featured_permission = false;
     												}
     											}
-                                            }
 
-											if ($is_editor && $featured_permission) {
+											if ( $featured_permission) {
 												if ($setup4_membersettings_paymentsystem != 2) {
 
 													$setup31_userpayments_pricefeatured = PFSAIssetControl('setup31_userpayments_pricefeatured','','5');
@@ -2923,11 +2922,8 @@ myDropzone.on("addedfile", function(origFile) {
 							                            </div>';
 							                        $this->FieldOutput .= '</section>';
 												}
-												
-												
-						                    	
-						                    	
-						                    }
+						          }
+										}
 										/**
 										*Featured Item 
 										**/
