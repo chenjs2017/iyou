@@ -311,7 +311,7 @@ function pf_itemgrid2_func_new( $atts ) {
  							COS(ifnull(substring_index(location.meta_value,',',-1),0) / 57.29577951 - ifnull(". $lon .",0)/ 57.29577951))))";
 					$orderby_statement = '';
 					if ($add_feature) {
-						$orderby_statement .= $wpdb->prefix . "postmeta.meta_value*1 desc,";
+						$orderby_statement .= "feature.meta_value*1 desc,";
 						$keyword = isset($_REQUEST['jobskeyword']) ? $_REQUEST['jobskeyword'] : '';
 						if($keyword !='') {
 							$orderby_statement .= "(match(post_title,post_content) against ('" . $keyword . "')) desc,";
