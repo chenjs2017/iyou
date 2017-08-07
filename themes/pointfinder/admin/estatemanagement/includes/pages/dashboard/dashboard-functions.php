@@ -243,7 +243,7 @@
 				    }else{
 				    	$duration_package =  get_post_meta( $vars['pfpackselector'], 'webbupointfinder_lp_billing_period', true );
 						if (empty($duration_package)) {
-							$duration_package = 1000;
+							$duration_package = 100000;
 						}
 				    };
 
@@ -321,7 +321,7 @@
 				    }else{
 				    	$duration_package =  get_post_meta( $vars['pfpackselector'], 'webbupointfinder_lp_billing_period', true );
 						if (empty($duration_package)) {
-							$duration_package = 1000;
+							$duration_package = 100000;
 						}
 				    };
 
@@ -942,7 +942,7 @@
 			    }else{
 			    	$duration_package =  get_post_meta( $vars['pfpackselector'], 'webbupointfinder_lp_billing_period', true );
 					if (empty($duration_package)) {
-						$duration_package = 1000;
+						$duration_package = 100000;
 					}
 			    };
 
