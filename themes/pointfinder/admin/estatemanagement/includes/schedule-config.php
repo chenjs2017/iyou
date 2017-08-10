@@ -10,15 +10,17 @@
 /**
 *Activate all schedule hooks
 **/
+/*
 add_action( 'after_switch_theme', 'pointfinder_activation_twicedaily' );
 function pointfinder_activation_twicedaily() {
 	wp_schedule_event( strtotime(date('Y-m-d H:s:i',mktime(23,59,59,date('m'),date('d'),date('Y')) )), 'twicedaily', 'pointfinder_schedule_hooks_hourly' );
 }
 add_action( 'after_switch_theme', 'pointfinder_activation_daily' );
 function pointfinder_activation_daily() {
-	flush_rewrite_rules();/*added with v1.5.8*/
+	flush_rewrite_rules();//added with v1.5.8
 	wp_schedule_event( strtotime(date('Y-m-d H:s:i',mktime(23,59,59,date('m'),date('d'),date('Y')) )), 'daily', 'pointfinder_schedule_hooks_daily' );
 }
+*/
 
 /**
 *Deactivate all schedule hooks 
