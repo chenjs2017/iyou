@@ -10,7 +10,6 @@
 /**
 *Activate all schedule hooks
 **/
-/*
 add_action( 'after_switch_theme', 'pointfinder_activation_twicedaily' );
 function pointfinder_activation_twicedaily() {
 	wp_schedule_event( strtotime(date('Y-m-d H:s:i',mktime(23,59,59,date('m'),date('d'),date('Y')) )), 'twicedaily', 'pointfinder_schedule_hooks_hourly' );
@@ -20,7 +19,6 @@ function pointfinder_activation_daily() {
 	flush_rewrite_rules();//added with v1.5.8
 	wp_schedule_event( strtotime(date('Y-m-d H:s:i',mktime(23,59,59,date('m'),date('d'),date('Y')) )), 'daily', 'pointfinder_schedule_hooks_daily' );
 }
-*/
 
 /**
 *Deactivate all schedule hooks 
@@ -46,6 +44,7 @@ if ($setup4_membersettings_paymentsystem == 2) {
 		**/
 			add_action( 'pointfinder_schedule_hooks_hourly', 'pointfinder_check_expires_member' );
 			function pointfinder_check_expires_member() {
+				return;
 				
 				/*
 				Direct payment:
@@ -133,6 +132,7 @@ if ($setup4_membersettings_paymentsystem == 2) {
 		**/
 			add_action( 'pointfinder_schedule_hooks_daily', 'pointfinder_check_expiring_member' );
 			function pointfinder_check_expiring_member() {
+				return;
 				
 				/*
 				Only for Direct payments. And this schedule will check item 1 day before expire.
@@ -253,6 +253,7 @@ if ($setup4_membersettings_paymentsystem == 2) {
 			add_action( 'pointfinder_schedule_hooks_hourly', 'pointfinder_clean_pending_orders' );
 
 			function pointfinder_clean_pending_orders() {
+				return;
 				/* 
 				Clean orders if waited longer then 10 days & if status is pending payment.
 				This function will remove the old pendingpayment records from system.
@@ -322,8 +323,10 @@ if ($setup4_membersettings_paymentsystem == 2) {
 		*Start: Check Expired Items & Expire
 		**/
 			add_action( 'pointfinder_schedule_hooks_hourly', 'pointfinder_check_expires' );
+			
 			/*add_action( 'init', 'pointfinder_check_expires' );*/
 			function pointfinder_check_expires() {
+				return;
 				
 				/*
 				Direct payment:
@@ -404,6 +407,7 @@ if ($setup4_membersettings_paymentsystem == 2) {
 		**/
 			add_action( 'pointfinder_schedule_hooks_hourly', 'pointfinder_check_expires_featured' );
 			function pointfinder_check_expires_featured() {
+				return;
 				
 				/*
 				Direct payment:
@@ -489,6 +493,7 @@ if ($setup4_membersettings_paymentsystem == 2) {
 			add_action( 'pointfinder_schedule_hooks_daily', 'pointfinder_check_expiring' );
 
 			function pointfinder_check_expiring() {
+				return;
 				
 				/*
 				Only for Direct payments. And this schedule will check item 1 day before expire.
